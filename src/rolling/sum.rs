@@ -2,7 +2,7 @@ use pyo3::prelude::*;
 use std::f64::NAN;
 
 #[pyclass]
-struct Sumer {
+pub struct Sumer {
     buf: Vec<f64>,
     n: usize,
     cur_idx: usize,
