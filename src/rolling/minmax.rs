@@ -37,13 +37,9 @@ impl Maxer {
         if self.nan_count > 0 {
             NAN
         } else {
-            // *self.buf
-            //     .iter()
-            //     .max_by(|a, b| a.partial_cmp(b).unwrap()).unwrap()
             self.buf
                 .iter()
-                .cloned()
-                .fold(NAN, |max, x| if x < max { max } else { x })
+                .fold(NAN, |max, x| if *x < max { max } else { *x })
         }
     }
 }
@@ -84,13 +80,9 @@ impl Miner {
         if self.nan_count > 0 {
             NAN
         } else {
-            // *self.buf
-            //     .iter()
-            //     .max_by(|a, b| a.partial_cmp(b).unwrap()).unwrap()
             self.buf
                 .iter()
-                .cloned()
-                .fold(NAN, |max, x| if x > max { max } else { x })
+                .fold(NAN, |max, x| if *x > max { max } else { *x })
         }
     }
 }
