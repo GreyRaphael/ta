@@ -1,4 +1,5 @@
 use pyo3::prelude::*;
+pub mod utils;
 mod rolling;
 
 /// A Python module implemented in Rust.

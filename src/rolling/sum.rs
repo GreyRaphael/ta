@@ -1,5 +1,6 @@
 use pyo3::prelude::*;
 use std::f64::NAN;
+use crate::utils::is_nan_or_inf;
 
 #[pyclass]
 pub struct Sumer {
@@ -46,8 +47,4 @@ impl Sumer {
             self.sum
         }
     }
-}
-
-fn is_nan_or_inf(x: f64) -> bool {
-    x.is_nan() || x.is_infinite()
 }
