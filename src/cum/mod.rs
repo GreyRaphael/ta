@@ -3,6 +3,7 @@ mod corr;
 mod minmax;
 mod statis;
 mod delta;
+mod quantile;
 
 pub fn register(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
     let cum = PyModule::new_bound(parent_module.py(), "cum")?;
@@ -16,5 +17,6 @@ pub fn register(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
     cum.add_class::<minmax::Miner>()?;
     cum.add_class::<corr::Correlationer>()?;
     cum.add_class::<delta::Deltaer>()?;
+    cum.add_class::<delta::Pctchanger>()?;
     parent_module.add_submodule(&cum)
 }

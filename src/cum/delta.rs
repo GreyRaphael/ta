@@ -27,3 +27,29 @@ impl Deltaer {
         }
     }
 }
+
+#[pyclass]
+pub struct Pctchanger {
+    first_value: Option<f64>,
+}
+
+#[pymethods]
+impl Pctchanger {
+    #[new]
+    pub fn new() -> Self {
+        Self { first_value: None }
+    }
+
+    pub fn update(&mut self, x: f64) -> f64 {
+        if is_nan_or_inf(x) {
+            NAN
+        } else {
+            if let Some(first) = self.first_value {
+                (x - first) / first
+            } else {
+                self.first_value = Some(x);
+                0.0 // Percent change is zero at the first value
+            }
+        }
+    }
+}
