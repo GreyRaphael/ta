@@ -4,7 +4,6 @@ use std::f64::NAN;
 #[pyclass]
 pub struct Maxer {
     buf: Vec<f64>,
-    pub n: usize,
     cur_idx: usize,
     nan_count: usize,
 }
@@ -15,7 +14,6 @@ impl Maxer {
     pub fn new(n: usize) -> Self {
         Self {
             buf: vec![NAN; n],
-            n,
             cur_idx: 0,
             nan_count: n,
         }
@@ -24,7 +22,7 @@ impl Maxer {
     pub fn update(&mut self, new_val: f64) -> f64 {
         let old_val = self.buf[self.cur_idx];
         self.buf[self.cur_idx] = new_val;
-        self.cur_idx = (self.cur_idx + 1) % self.n;
+        self.cur_idx = (self.cur_idx + 1) % self.buf.len();
 
         if new_val.is_nan() {
             self.nan_count += 1;
@@ -47,7 +45,6 @@ impl Maxer {
 #[pyclass]
 pub struct Miner {
     buf: Vec<f64>,
-    pub n: usize,
     cur_idx: usize,
     nan_count: usize,
 }
@@ -58,7 +55,6 @@ impl Miner {
     pub fn new(n: usize) -> Self {
         Self {
             buf: vec![NAN; n],
-            n,
             cur_idx: 0,
             nan_count: n,
         }
@@ -67,7 +63,7 @@ impl Miner {
     pub fn update(&mut self, new_val: f64) -> f64 {
         let old_val = self.buf[self.cur_idx];
         self.buf[self.cur_idx] = new_val;
-        self.cur_idx = (self.cur_idx + 1) % self.n;
+        self.cur_idx = (self.cur_idx + 1) % self.buf.len();
 
         if new_val.is_nan() {
             self.nan_count += 1;
