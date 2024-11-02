@@ -1,5 +1,5 @@
-use crate::rolling::sum::Sumer;
 use pyo3::prelude::*;
+use super::sum::Sumer;
 
 #[pyclass]
 pub struct Meaner {

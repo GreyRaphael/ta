@@ -1,6 +1,7 @@
 use pyo3::prelude::*;
-pub mod sum;
-pub mod mean;
+mod sum;
+mod mean;
+// You don't need to make them pub mod unless you want them accessible from outside the rolling module.
 
 pub fn register(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
     let rolling = PyModule::new_bound(parent_module.py(), "rolling")?;
