@@ -2,6 +2,7 @@ use pyo3::prelude::*;
 mod sum;
 mod minmax;
 mod delta;
+mod statis;
 // You don't need to make them pub mod unless you want them accessible from outside the rolling module.
 
 pub fn register(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
@@ -12,5 +13,8 @@ pub fn register(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
     rolling.add_class::<minmax::Miner>()?;
     rolling.add_class::<delta::Deltaer>()?;
     rolling.add_class::<delta::Pctchanger>()?;
+    rolling.add_class::<statis::Stder>()?;
+    rolling.add_class::<statis::Skewer>()?;
+    rolling.add_class::<statis::Kurter>()?;
     parent_module.add_submodule(&rolling)
 }
