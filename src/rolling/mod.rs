@@ -4,6 +4,8 @@ mod minmax;
 mod delta;
 mod statis;
 mod ema;
+// mod quantile;
+mod corr;
 // You don't need to make them pub mod unless you want them accessible from outside the rolling module.
 
 pub fn register(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
@@ -18,5 +20,6 @@ pub fn register(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
     rolling.add_class::<statis::Skewer>()?;
     rolling.add_class::<statis::Kurter>()?;
     rolling.add_class::<ema::EMAer>()?;
+    rolling.add_class::<corr::Correlationer>()?;
     parent_module.add_submodule(&rolling)
 }
