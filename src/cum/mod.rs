@@ -1,9 +1,9 @@
 use pyo3::prelude::*;
 mod corr;
-mod minmax;
-mod statis;
 mod delta;
+mod minmax;
 mod quantile;
+mod statis;
 
 pub fn register(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
     let cum = PyModule::new_bound(parent_module.py(), "cum")?;
@@ -18,5 +18,6 @@ pub fn register(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
     cum.add_class::<corr::Correlationer>()?;
     cum.add_class::<delta::Deltaer>()?;
     cum.add_class::<delta::Pctchanger>()?;
+    cum.add_class::<quantile::Quantiler>()?;
     parent_module.add_submodule(&cum)
 }
