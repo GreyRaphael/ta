@@ -3,8 +3,8 @@ use pyo3::prelude::*;
 
 #[pyclass]
 pub struct Stder {
-    pub sumer: Sumer,
-    pub sq_sumer: Sumer,
+    sumer: Sumer,
+    sq_sumer: Sumer,
     n: usize,
 }
 
@@ -23,16 +23,16 @@ impl Stder {
         let sum = self.sumer.update(new_val);
         let sq_sum = self.sq_sumer.update(new_val * new_val);
 
-        let variance = (sq_sum - sum * sum / (self.n as f64)) / ((self.n - 1) as f64);
+        let variance = (sq_sum - sum * sum / self.n as f64) / (self.n as f64 - 1.0);
         variance.sqrt()
     }
 }
 
 #[pyclass]
 pub struct Skewer {
-    pub meaner: Meaner,
-    pub cub_sumer: Sumer,
-    pub sq_sumer: Sumer,
+    meaner: Meaner,
+    sq_sumer: Sumer,
+    cub_sumer: Sumer,
     n: usize,
 }
 
@@ -61,11 +61,13 @@ impl Skewer {
 
 #[pyclass]
 pub struct Kurter {
-    pub sumer: Sumer,
-    pub sq_sumer: Sumer,
-    pub cub_sumer: Sumer,
-    pub quad_sumer: Sumer,
+    sumer: Sumer,
+    sq_sumer: Sumer,
+    cub_sumer: Sumer,
+    quad_sumer: Sumer,
     n: usize,
+    factor01: f64,
+    factor02: f64,
 }
 
 #[pymethods]
@@ -78,6 +80,8 @@ impl Kurter {
             cub_sumer: Sumer::new(n),
             quad_sumer: Sumer::new(n),
             n,
+            factor01: (n * (n + 1)) as f64 / ((n - 1) * (n - 2) * (n - 3)) as f64,
+            factor02: ((n - 1) * (n - 1)) as f64 / ((n - 2) * (n - 3)) as f64,
         }
     }
 
@@ -93,10 +97,7 @@ impl Kurter {
         let value = quad_sum - 4.0 * cub_sum * mean + 6.0 * sq_sum * mean.powi(2)
             - 4.0 * sum * mean.powi(3)
             + self.n as f64 * mean.powi(4);
-        let factor01 = ((self.n + 1) as f64 * self.n as f64)
-            / ((self.n - 1) as f64 * (self.n - 2) as f64 * (self.n - 3) as f64);
-        let factor02 = 3.0 * ((self.n - 1) as f64 * (self.n - 1) as f64)
-            / ((self.n - 2) as f64 * (self.n - 3) as f64);
-        (factor01 * value / variance.powi(2)) - factor02
+
+        self.factor01 * value / variance.powi(2) - self.factor02
     }
 }
