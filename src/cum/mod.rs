@@ -7,6 +7,8 @@ pub fn register(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
     cum.add_class::<statis::Counter>()?;
     cum.add_class::<statis::Sumer>()?;
     cum.add_class::<statis::Meaner>()?;
+    cum.add_class::<statis::Stder>()?;
+    cum.add_class::<statis::Skewer>()?;
     cum.add_class::<minmax::Maxer>()?;
     cum.add_class::<minmax::Miner>()?;
     parent_module.add_submodule(&cum)

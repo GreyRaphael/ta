@@ -104,3 +104,39 @@ impl Stder {
         }
     }
 }
+
+#[pyclass]
+pub struct Skewer {
+    count: f64,
+    meaner: Meaner,
+    sq_sumer: Sumer,
+    cub_sumer: Sumer,
+}
+
+#[pymethods]
+impl Skewer {
+    #[new]
+    pub fn new() -> Self {
+        Self {
+            count: 0.0,
+            meaner: Meaner::new(),
+            sq_sumer: Sumer::new(),
+            cub_sumer: Sumer::new(),
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> f64 {
+        if is_nan_or_inf(new_val) {
+            NAN
+        } else {
+            self.count += 1.0;
+            let mean = self.meaner.update(new_val);
+            let sq_sum = self.sq_sumer.update(new_val * new_val);
+            let cub_sum = self.cub_sumer.update(new_val * new_val * new_val);
+
+            let variance = sq_sum / self.count as f64 - mean * mean;
+            (cub_sum / self.count as f64 - 3.0 * mean * variance - mean.powi(3))
+                / variance.powf(1.5)
+        }
+    }
+}
