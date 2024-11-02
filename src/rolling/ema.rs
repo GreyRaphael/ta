@@ -18,15 +18,11 @@ impl EMAer {
     }
 
     pub fn update(&mut self, new_val: f64) -> f64 {
-        match self.result {
-            Some(ref mut current_ema) => {
-                *current_ema = *current_ema * (1.0 - self.alpha) + new_val * self.alpha;
-                *current_ema
-            }
-            None => {
-                self.result = Some(new_val);
-                new_val
-            }
+        if let Some(prev_result) = self.result {
+            self.result = Some(prev_result * (1.0 - self.alpha) + new_val * self.alpha);
+        } else {
+            self.result = Some(new_val);
         }
+        self.result.unwrap()
     }
 }
