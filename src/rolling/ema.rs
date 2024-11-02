@@ -1,9 +1,14 @@
+use crate::utils::is_nan_or_inf;
 use pyo3::prelude::*;
+use std::f64::NAN;
+
+// Cumulative Exponential Moving Average (EMA) over all data points.
+// Since EMA is already cumulative in nature, we can use it as is.
 
 #[pyclass]
 pub struct EMAer {
     alpha: f64,
-    result: Option<f64>,
+    ema: Option<f64>,
 }
 
 #[pymethods]
@@ -11,18 +16,17 @@ impl EMAer {
     #[new]
     pub fn new(n: usize) -> Self {
         let alpha = 2.0 / (n as f64 + 1.0);
-        Self {
-            alpha,
-            result: None,
-        }
+        Self { alpha, ema: None }
     }
 
     pub fn update(&mut self, new_val: f64) -> f64 {
-        if let Some(prev_result) = self.result {
-            self.result = Some(prev_result * (1.0 - self.alpha) + new_val * self.alpha);
-        } else {
-            self.result = Some(new_val);
+        if !is_nan_or_inf(new_val) {
+            if let Some(prev_ema) = self.ema {
+                self.ema = Some(prev_ema * (1.0 - self.alpha) + new_val * self.alpha);
+            } else {
+                self.ema = Some(new_val);
+            }
         }
-        self.result.unwrap()
+        self.ema.unwrap_or(NAN)
     }
 }
