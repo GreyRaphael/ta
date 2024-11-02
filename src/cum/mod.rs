@@ -1,6 +1,7 @@
 use pyo3::prelude::*;
-mod statis;
+mod corr;
 mod minmax;
+mod statis;
 
 pub fn register(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
     let cum = PyModule::new_bound(parent_module.py(), "cum")?;
@@ -9,7 +10,9 @@ pub fn register(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
     cum.add_class::<statis::Meaner>()?;
     cum.add_class::<statis::Stder>()?;
     cum.add_class::<statis::Skewer>()?;
+    cum.add_class::<statis::Kurter>()?;
     cum.add_class::<minmax::Maxer>()?;
     cum.add_class::<minmax::Miner>()?;
+    cum.add_class::<corr::Correlationer>()?;
     parent_module.add_submodule(&cum)
 }
