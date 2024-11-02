@@ -1,10 +1,12 @@
 use pyo3::prelude::*;
-pub mod utils;
+mod cum;
 mod rolling;
+pub mod utils;
 
 /// A Python module implemented in Rust.
 #[pymodule]
 fn ta(m: &Bound<'_, PyModule>) -> PyResult<()> {
     rolling::register(m)?;
+    cum::register(m)?;
     Ok(())
 }
