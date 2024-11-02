@@ -9,11 +9,11 @@ maxer = rolling.Maxer(3)
 miner = rolling.Miner(3)
 deltaer = rolling.Deltaer(3)
 pctchanger = rolling.Pctchanger(3)
-quantiler = rolling.Quantiler(10, 0.3)
+quantiler = rolling.Quantiler(11, 0.3)
 
 rollingers = [sumer, meaner, maxer, miner, deltaer, pctchanger, quantiler]
 
 for rollinger in rollingers:
-    for i in range(1, 11):
+    for i in range(20):
         print(i, rollinger.update(i))
     print("-" * 20)
