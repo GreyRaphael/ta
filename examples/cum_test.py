@@ -5,13 +5,13 @@ print(cum.__all__)
 counter = cum.Counter()
 sumer = cum.Sumer()
 meaner = cum.Meaner()
-# maxer = cum.Maxer()
-# miner = cum.Miner()
+maxer = cum.Maxer()
+miner = cum.Miner()
 # deltaer = cum.Deltaer()
 # pctchanger = cum.Pctchanger()
 # quantiler = cum.Quantiler(0.3)
 
-cumers = [counter, sumer, meaner]
+cumers = [counter, sumer, meaner, maxer, miner]
 # cumers = [sumer, meaner, maxer, miner, deltaer, pctchanger, quantiler]
 # cumers = [deltaer, pctchanger]
 
