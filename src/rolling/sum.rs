@@ -4,7 +4,7 @@ use std::f64::NAN;
 #[pyclass]
 pub struct Sumer {
     buf: Vec<f64>,
-    n: usize,
+    pub n: usize,
     cur_idx: usize,
     nan_count: usize,
     sum: f64,
@@ -13,7 +13,7 @@ pub struct Sumer {
 #[pymethods]
 impl Sumer {
     #[new]
-    fn new(n: usize) -> Self {
+    pub fn new(n: usize) -> Self {
         Self {
             buf: vec![NAN; n],
             n,
@@ -23,7 +23,7 @@ impl Sumer {
         }
     }
 
-    fn update(&mut self, new_val: f64) -> f64 {
+    pub fn update(&mut self, new_val: f64) -> f64 {
         let old_val = self.buf[self.cur_idx];
         self.buf[self.cur_idx] = new_val;
         self.cur_idx = (self.cur_idx + 1) % self.n;
