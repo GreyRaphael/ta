@@ -30,9 +30,9 @@ impl Correlationer {
         let mean_y_sq = self.y_sq_meaner.update(y * y);
         let mean_xy = self.xy_meaner.update(x * y);
 
-        let sigmax_sq = mean_x_sq - mean_x.powi(2);
-        let sigmay_sq = mean_y_sq - mean_y.powi(2);
+        let sigmax_sq = (mean_x_sq - mean_x.powi(2)).sqrt();
+        let sigmay_sq = (mean_y_sq - mean_y.powi(2)).sqrt();
 
-        (mean_xy - mean_x * mean_y) / (sigmax_sq.sqrt() * sigmay_sq.sqrt())
+        (mean_xy - mean_x * mean_y) / (sigmax_sq * sigmay_sq)
     }
 }
