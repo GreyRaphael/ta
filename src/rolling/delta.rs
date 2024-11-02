@@ -28,7 +28,8 @@ impl Deltaer {
     }
 
     pub fn get(&self, idx: usize) -> f64 {
-        self.buf[(self.head_idx + idx) % self.buf.len()]
+        // behave like data coming from left to right
+        self.buf[(self.head_idx + self.buf.len() - idx) % self.buf.len()]
     }
 }
 
