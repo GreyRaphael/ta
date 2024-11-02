@@ -1,5 +1,5 @@
 use pyo3::prelude::*;
-mod sum;
+pub mod sum;
 mod minmax;
 mod delta;
 mod statis;

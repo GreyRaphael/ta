@@ -1,6 +1,7 @@
 use pyo3::prelude::*;
 mod cum;
 mod rolling;
+mod indicator;
 pub mod utils;
 
 /// A Python module implemented in Rust.
@@ -8,5 +9,6 @@ pub mod utils;
 fn ta(m: &Bound<'_, PyModule>) -> PyResult<()> {
     rolling::register(m)?;
     cum::register(m)?;
+    indicator::register(m)?;
     Ok(())
 }
