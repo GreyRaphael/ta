@@ -64,7 +64,6 @@ impl ADX {
 
 #[pyclass]
 pub struct ADXR {
-    period: usize,
     adxer: ADX,
     adx_deltaer: rolling::delta::Deltaer,
 }
@@ -74,7 +73,6 @@ impl ADXR {
     #[new]
     pub fn new(timeperiod: usize) -> Self {
         Self {
-            period: timeperiod,
             adxer: ADX::new(timeperiod),
             adx_deltaer: rolling::delta::Deltaer::new(timeperiod),
         }
@@ -83,8 +81,8 @@ impl ADXR {
     pub fn update(&mut self, high: f64, low: f64, preclose: f64) -> f64 {
         let adx = self.adxer.update(high, low, preclose);
         self.adx_deltaer.update(adx);
-        let tail_adx = self.adx_deltaer.get(0);
-        let head_adx = self.adx_deltaer.get(self.period);
+        let tail_adx = self.adx_deltaer.tail();
+        let head_adx = self.adx_deltaer.head();
         return (tail_adx + head_adx) / 2.0;
     }
 }
