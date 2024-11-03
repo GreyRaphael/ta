@@ -1,4 +1,4 @@
-use super::sum::Meaner;
+use super::statis::Meaner;
 use pyo3::prelude::*;
 
 #[pyclass]

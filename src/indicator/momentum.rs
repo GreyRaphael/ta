@@ -9,10 +9,10 @@ use pyo3::prelude::*;
 pub struct ADX {
     delta_high: rolling::delta::Deltaer,
     delta_low: rolling::delta::Deltaer,
-    plus_dm_sumer: rolling::sum::Sumer,
-    minus_dm_sumer: rolling::sum::Sumer,
-    tr_sumer: rolling::sum::Sumer,
-    dx_meaner: rolling::sum::Meaner,
+    plus_dm_sumer: rolling::statis::Sumer,
+    minus_dm_sumer: rolling::statis::Sumer,
+    tr_sumer: rolling::statis::Sumer,
+    dx_meaner: rolling::statis::Meaner,
 }
 
 #[pymethods]
@@ -22,10 +22,10 @@ impl ADX {
         Self {
             delta_high: rolling::delta::Deltaer::new(2),
             delta_low: rolling::delta::Deltaer::new(2),
-            plus_dm_sumer: rolling::sum::Sumer::new(timeperiod),
-            minus_dm_sumer: rolling::sum::Sumer::new(timeperiod),
-            tr_sumer: rolling::sum::Sumer::new(timeperiod),
-            dx_meaner: rolling::sum::Meaner::new(timeperiod),
+            plus_dm_sumer: rolling::statis::Sumer::new(timeperiod),
+            minus_dm_sumer: rolling::statis::Sumer::new(timeperiod),
+            tr_sumer: rolling::statis::Sumer::new(timeperiod),
+            dx_meaner: rolling::statis::Meaner::new(timeperiod),
         }
     }
 
@@ -93,12 +93,12 @@ impl ADXR {
 
 #[pyclass]
 pub struct ULTOSC {
-    timeperiod1_bp_sumer: rolling::sum::Sumer,
-    timeperiod2_bp_sumer: rolling::sum::Sumer,
-    timeperiod3_bp_sumer: rolling::sum::Sumer,
-    timeperiod1_tr_sumer: rolling::sum::Sumer,
-    timeperiod2_tr_sumer: rolling::sum::Sumer,
-    timeperiod3_tr_sumer: rolling::sum::Sumer,
+    timeperiod1_bp_sumer: rolling::statis::Sumer,
+    timeperiod2_bp_sumer: rolling::statis::Sumer,
+    timeperiod3_bp_sumer: rolling::statis::Sumer,
+    timeperiod1_tr_sumer: rolling::statis::Sumer,
+    timeperiod2_tr_sumer: rolling::statis::Sumer,
+    timeperiod3_tr_sumer: rolling::statis::Sumer,
 }
 
 #[pymethods]
@@ -106,12 +106,12 @@ impl ULTOSC {
     #[new]
     pub fn new(timeperiod1: usize, timeperiod2: usize, timeperiod3: usize) -> Self {
         Self {
-            timeperiod1_bp_sumer: rolling::sum::Sumer::new(timeperiod1),
-            timeperiod2_bp_sumer: rolling::sum::Sumer::new(timeperiod2),
-            timeperiod3_bp_sumer: rolling::sum::Sumer::new(timeperiod3),
-            timeperiod1_tr_sumer: rolling::sum::Sumer::new(timeperiod1),
-            timeperiod2_tr_sumer: rolling::sum::Sumer::new(timeperiod2),
-            timeperiod3_tr_sumer: rolling::sum::Sumer::new(timeperiod3),
+            timeperiod1_bp_sumer: rolling::statis::Sumer::new(timeperiod1),
+            timeperiod2_bp_sumer: rolling::statis::Sumer::new(timeperiod2),
+            timeperiod3_bp_sumer: rolling::statis::Sumer::new(timeperiod3),
+            timeperiod1_tr_sumer: rolling::statis::Sumer::new(timeperiod1),
+            timeperiod2_tr_sumer: rolling::statis::Sumer::new(timeperiod2),
+            timeperiod3_tr_sumer: rolling::statis::Sumer::new(timeperiod3),
         }
     }
 

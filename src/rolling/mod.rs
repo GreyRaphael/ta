@@ -1,8 +1,7 @@
 use pyo3::prelude::*;
-pub mod sum;
 mod minmax;
 pub mod delta;
-mod statis;
+pub mod statis;
 mod ema;
 mod quantile;
 mod corr;
@@ -10,8 +9,8 @@ mod corr;
 
 pub fn register(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
     let rolling = PyModule::new_bound(parent_module.py(), "rolling")?;
-    rolling.add_class::<sum::Sumer>()?;
-    rolling.add_class::<sum::Meaner>()?;
+    rolling.add_class::<statis::Sumer>()?;
+    rolling.add_class::<statis::Meaner>()?;
     rolling.add_class::<minmax::Maxer>()?;
     rolling.add_class::<minmax::Miner>()?;
     rolling.add_class::<delta::Deltaer>()?;
