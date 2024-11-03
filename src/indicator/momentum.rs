@@ -60,6 +60,35 @@ impl ADX {
     }
 }
 
+// real = ADXR(high, low, close, timeperiod=14)
+
+#[pyclass]
+pub struct ADXR {
+    period: usize,
+    adxer: ADX,
+    adx_deltaer: rolling::delta::Deltaer,
+}
+
+#[pymethods]
+impl ADXR {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {
+            period: timeperiod,
+            adxer: ADX::new(timeperiod),
+            adx_deltaer: rolling::delta::Deltaer::new(timeperiod),
+        }
+    }
+
+    pub fn update(&mut self, high: f64, low: f64, preclose: f64) -> f64 {
+        let adx = self.adxer.update(high, low, preclose);
+        self.adx_deltaer.update(adx);
+        let tail_adx = self.adx_deltaer.get(0);
+        let head_adx = self.adx_deltaer.get(self.period);
+        return (tail_adx + head_adx) / 2.0;
+    }
+}
+
 // real = ULTOSC(high, low, close, timeperiod1=7, timeperiod2=14, timeperiod3=28)
 
 #[pyclass]
