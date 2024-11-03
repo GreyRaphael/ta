@@ -2,10 +2,46 @@ use pyo3::prelude::*;
 use std::f64::NAN;
 
 #[pyclass]
-pub struct Deltaer {
+pub struct Container {
     buf: Vec<f64>,
-    cur_idx: usize,
     head_idx: usize,
+    tail_idx: usize,
+}
+
+#[pymethods]
+impl Container {
+    #[new]
+    pub fn new(n: usize) -> Self {
+        Self {
+            buf: vec![NAN; n],
+            head_idx: 0,
+            tail_idx: 0,
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) {
+        self.tail_idx = self.head_idx;
+        self.buf[self.tail_idx] = new_val;
+        self.head_idx = (self.head_idx + 1) % self.buf.len();
+    }
+
+    pub fn get(&self, idx: usize) -> f64 {
+        // idx=0 is head; idx=n-1 is tail
+        self.buf[(self.head_idx + idx) % self.buf.len()]
+    }
+
+    pub fn head(&self) -> f64 {
+        self.buf[self.head_idx]
+    }
+
+    pub fn tail(&self) -> f64 {
+        self.buf[self.tail_idx]
+    }
+}
+
+#[pyclass]
+pub struct Deltaer {
+    container: Container,
 }
 
 #[pymethods]
@@ -13,29 +49,32 @@ impl Deltaer {
     #[new]
     pub fn new(n: usize) -> Self {
         Self {
-            buf: vec![NAN; n],
-            cur_idx: 0,
-            head_idx: 0,
+            container: Container::new(n),
         }
     }
 
     pub fn update(&mut self, new_val: f64) -> f64 {
-        self.head_idx = self.cur_idx;
-        self.buf[self.head_idx] = new_val;
-        self.cur_idx = (self.cur_idx + 1) % self.buf.len();
+        self.container.update(new_val);
 
-        new_val - self.buf[self.cur_idx]
+        self.container.tail() - self.container.head()
     }
 
     pub fn get(&self, idx: usize) -> f64 {
-        // behave like data coming from left to right
-        self.buf[(self.head_idx + self.buf.len() - idx) % self.buf.len()]
+        self.container.get(idx)
+    }
+
+    pub fn head(&self) -> f64 {
+        self.container.head()
+    }
+
+    pub fn tail(&self) -> f64 {
+        self.container.tail()
     }
 }
 
 #[pyclass]
 pub struct Pctchanger {
-    deltaer: Deltaer,
+    container: Container,
 }
 
 #[pymethods]
@@ -43,16 +82,25 @@ impl Pctchanger {
     #[new]
     pub fn new(n: usize) -> Self {
         Self {
-            deltaer: Deltaer::new(n),
+            container: Container::new(n),
         }
     }
 
     pub fn update(&mut self, new_val: f64) -> f64 {
-        let diff = self.deltaer.update(new_val);
-        diff / (new_val - diff)
+        self.container.update(new_val);
+
+        self.container.tail() / self.container.head() - 1.0
     }
 
     pub fn get(&self, idx: usize) -> f64 {
-        self.deltaer.get(idx)
+        self.container.get(idx)
+    }
+
+    pub fn head(&self) -> f64 {
+        self.container.head()
+    }
+
+    pub fn tail(&self) -> f64 {
+        self.container.tail()
     }
 }

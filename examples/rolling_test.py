@@ -19,3 +19,11 @@ for rollinger in rollingers:
         # print(i, rollinger.update(i), rollinger.get(0), rolling.get(2))
         print(i, rollinger.update(i))
     print("-" * 20)
+
+print(f"head={deltaer.head()}, tail={deltaer.tail()}")
+for j in range(3):
+    print(f"delta get ({j}) is {deltaer.get(j)}")
+
+print(f"head={pctchanger.head()}, tail={pctchanger.tail()}")
+for j in range(3):
+    print(f"delta get ({j}) is {pctchanger.get(j)}")
