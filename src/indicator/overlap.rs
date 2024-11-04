@@ -150,3 +150,32 @@ impl SMA {
         self.meaner.update(new_val)
     }
 }
+
+// TEMA: Triple Exponential Moving Average
+// NOTE: The TEMA function has an unstable period, different from talib.T3
+#[pyclass]
+pub struct TEMA {
+    ema_lv1: EMA,
+    ema_lv2: EMA,
+    ema_lv3: EMA,
+}
+
+#[pymethods]
+impl TEMA {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {
+            ema_lv1: EMA::new(timeperiod),
+            ema_lv2: EMA::new(timeperiod),
+            ema_lv3: EMA::new(timeperiod),
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> f64 {
+        let lv1 = self.ema_lv1.update(new_val);
+        let lv2 = self.ema_lv2.update(lv1);
+        let lv3 = self.ema_lv3.update(lv2);
+
+        3.0 * lv1 - 3.0 * lv2 + lv3
+    }
+}
