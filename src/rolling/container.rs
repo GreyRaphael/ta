@@ -37,4 +37,8 @@ impl Container {
     pub fn tail(&self) -> f64 {
         self.buf[self.tail_idx]
     }
+
+    pub fn len(&self) -> usize {
+        self.buf.len()
+    }
 }
