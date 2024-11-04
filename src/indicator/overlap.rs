@@ -62,6 +62,49 @@ impl EMA {
     }
 }
 
+// KAMA - Kaufman Adaptive Moving Average
+// NOTE: The KAMA function has an unstable period.
+// real = KAMA(real, timeperiod=30)
+#[pyclass]
+pub struct KAMA {
+    close_vec: rolling::container::Container,
+    volatility_sumer: rolling::statis::Sumer,
+    fast_sc: f64,
+    slow_sc: f64,
+    kama: Option<f64>,
+}
+
+#[pymethods]
+impl KAMA {
+    #[new]
+    pub fn new(er_period: usize, fast_period: usize, slow_period: usize) -> Self {
+        Self {
+            close_vec: rolling::container::Container::new(er_period),
+            volatility_sumer: rolling::statis::Sumer::new(er_period),
+            fast_sc: 2.0 / (fast_period as f64 + 1.0),
+            slow_sc: 2.0 / (slow_period as f64 + 1.0),
+            kama: None,
+        }
+    }
+
+    pub fn update(&mut self, close: f64, preclose: f64) -> f64 {
+        if !is_nan_or_inf(close) {
+            self.close_vec.update(close);
+            let change = (close - self.close_vec.head()).abs();
+            let volatility = self.volatility_sumer.update((close - preclose).abs());
+            let er = change / volatility;
+            let sc = (er * (self.fast_sc - self.slow_sc) + self.slow_sc).powi(2);
+
+            if let Some(prev_kama) = self.kama {
+                self.kama = Some(prev_kama + sc * (close - prev_kama));
+            } else {
+                self.kama = Some(close);
+            }
+        }
+        self.kama.unwrap_or(NAN)
+    }
+}
+
 // SMA - Simple Moving Average
 // real = SMA(real, timeperiod=30)
 #[pyclass]
