@@ -225,3 +225,33 @@ impl T3 {
         self.c1 * lv6 + self.c2 * lv5 + self.c3 * lv4 + self.c4 * lv3
     }
 }
+
+// WMA - Weighted Moving Average
+#[pyclass]
+pub struct WMA {
+    container: rolling::container::Container,
+    weights: Vec<f64>,
+}
+
+#[pymethods]
+impl WMA {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        let weight_sum = (timeperiod * (timeperiod + 1)) as f64 / 2.0;
+        Self {
+            container: rolling::container::Container::new(timeperiod),
+            weights: (0..timeperiod)
+                .map(|i| (i as f64 + 1.0) / weight_sum)
+                .collect::<Vec<_>>(),
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> f64 {
+        self.container.update(new_val);
+        self.container
+            .iter()
+            .zip(&self.weights)
+            .map(|(x, w)| x * w)
+            .sum()
+    }
+}

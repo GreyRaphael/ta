@@ -7,5 +7,6 @@ pub fn register(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
     indicator.add_class::<momentum::ADX>()?;
     indicator.add_class::<momentum::ADXR>()?;
     indicator.add_class::<momentum::ULTOSC>()?;
+    indicator.add_class::<overlap::WMA>()?;
     parent_module.add_submodule(&indicator)
 }
