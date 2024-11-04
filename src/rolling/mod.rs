@@ -1,10 +1,11 @@
 use pyo3::prelude::*;
-mod minmax;
-pub mod delta;
-pub mod statis;
-mod ema;
-mod quantile;
+mod container;
 mod corr;
+pub mod delta;
+mod ema;
+mod minmax;
+mod quantile;
+pub mod statis;
 // You don't need to make them pub mod unless you want them accessible from outside the rolling module.
 
 pub fn register(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
