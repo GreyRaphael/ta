@@ -2,6 +2,32 @@ use crate::{rolling, utils::is_nan_or_inf};
 use pyo3::prelude::*;
 use std::f64::NAN;
 
+// DEMA - Double Exponential Moving Average
+// real = DEMA(real, timeperiod=30)
+#[pyclass]
+pub struct DEMA {
+    ema_lv1: EMA,
+    ema_lv2: EMA,
+}
+
+#[pymethods]
+impl DEMA {
+    #[new]
+    pub fn new(n: usize) -> Self {
+        Self {
+            ema_lv1: EMA::new(n),
+            ema_lv2: EMA::new(n),
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> f64 {
+        let lv1 = self.ema_lv1.update(new_val);
+        let lv2 = self.ema_lv2.update(lv1);
+
+        2.0 * lv1 - lv2
+    }
+}
+
 // EMA - Exponential Moving Average
 // NOTE: The EMA function has an unstable period.
 // Cumulative Exponential Moving Average (EMA) over all data points.
