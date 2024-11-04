@@ -56,10 +56,10 @@ impl EMA {
     pub fn update(&mut self, new_val: f64) -> f64 {
         if is_nan_or_inf(new_val) {
             NAN
-        }else{
+        } else {
             if let Some(prev_ema) = self.ema {
                 self.ema = Some(prev_ema * (1.0 - self.alpha) + new_val * self.alpha);
-            }else{
+            } else {
                 self.ema = Some(new_val);
             }
             self.ema.unwrap()
@@ -69,10 +69,9 @@ impl EMA {
 
 // KAMA - Kaufman Adaptive Moving Average
 // NOTE: The KAMA function has an unstable period.
-// real = KAMA(real, timeperiod=30)
 #[pyclass]
 pub struct KAMA {
-    close_vec: rolling::container::Container,
+    price_vec: rolling::container::Container,
     volatility_sumer: rolling::statis::Sumer,
     fast_sc: f64,
     slow_sc: f64,
@@ -84,29 +83,32 @@ impl KAMA {
     #[new]
     pub fn new(er_period: usize, fast_period: usize, slow_period: usize) -> Self {
         Self {
-            close_vec: rolling::container::Container::new(er_period),
+            price_vec: rolling::container::Container::new(er_period), // typical 10
             volatility_sumer: rolling::statis::Sumer::new(er_period),
-            fast_sc: 2.0 / (fast_period as f64 + 1.0),
-            slow_sc: 2.0 / (slow_period as f64 + 1.0),
+            fast_sc: 2.0 / (fast_period as f64 + 1.0), // typical 2
+            slow_sc: 2.0 / (slow_period as f64 + 1.0), // typical 30
             kama: None,
         }
     }
 
-    pub fn update(&mut self, close: f64, preclose: f64) -> f64 {
-        if !is_nan_or_inf(close) {
-            self.close_vec.update(close);
-            let change = (close - self.close_vec.head()).abs();
-            let volatility = self.volatility_sumer.update((close - preclose).abs());
+    pub fn update(&mut self, price: f64, preprice: f64) -> f64 {
+        if is_nan_or_inf(price) {
+            NAN
+        } else {
+            self.price_vec.update(price);
+            let change = (price - self.price_vec.head()).abs();
+            let volatility = self.volatility_sumer.update((price - preprice).abs());
             let er = change / volatility;
             let sc = (er * (self.fast_sc - self.slow_sc) + self.slow_sc).powi(2);
 
             if let Some(prev_kama) = self.kama {
-                self.kama = Some(prev_kama + sc * (close - prev_kama));
+                self.kama = Some(prev_kama + sc * (price - prev_kama));
             } else {
-                self.kama = Some(close);
+                self.kama = Some(price);
             }
+
+            self.kama.unwrap()
         }
-        self.kama.unwrap_or(NAN)
     }
 }
 
