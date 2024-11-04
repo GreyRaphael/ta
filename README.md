@@ -37,11 +37,11 @@ Overlap
 - [X] EMA - Exponential Moving Average
 - [] HT_TRENDLINE - Hilbert Transform - Instantaneous Trendline
 - [X] KAMA - Kaufman Adaptive Moving Average
-- [x] MA - Moving average, NO NEED
+- [x] MA - Moving average, **NO NEED**
 - [] MAMA - MESA Adaptive Moving Average
-- [] MAVP - Moving average with variable period
-- [] MIDPOINT - MidPoint over period
-- [] MIDPRICE - Midpoint Price over period
+- [x] MAVP - Moving average with variable period **NO NEED**
+- [x] MIDPOINT - MidPoint over period
+- [x] MIDPRICE - Midpoint Price over period
 - [] SAR - Parabolic SAR
 - [X] SMA - Simple Moving Average
 - [X] T3 - Triple Exponential Moving Average (T3)

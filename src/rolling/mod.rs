@@ -2,7 +2,7 @@ use pyo3::prelude::*;
 pub mod container;
 mod corr;
 mod delta;
-mod minmax;
+pub mod minmax;
 mod quantile;
 pub mod statis;
 // You don't need to make them pub mod unless you want them accessible from outside the rolling module.

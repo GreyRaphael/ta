@@ -130,6 +130,50 @@ impl MAMA {
     }
 }
 
+// MIDPOINT - MidPoint over period
+#[pyclass]
+pub struct MIDPOINT {
+    maxer: rolling::minmax::Maxer,
+    miner: rolling::minmax::Miner,
+}
+
+#[pymethods]
+impl MIDPOINT {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {
+            maxer: rolling::minmax::Maxer::new(timeperiod),
+            miner: rolling::minmax::Miner::new(timeperiod),
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> f64 {
+        (self.maxer.update(new_val) + self.miner.update(new_val)) / 2.0
+    }
+}
+
+// MIDPRICE - Midpoint Price over period
+#[pyclass]
+pub struct MIDPRICE {
+    maxer: rolling::minmax::Maxer,
+    miner: rolling::minmax::Miner,
+}
+
+#[pymethods]
+impl MIDPRICE {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {
+            maxer: rolling::minmax::Maxer::new(timeperiod),
+            miner: rolling::minmax::Miner::new(timeperiod),
+        }
+    }
+
+    pub fn update(&mut self, high: f64, low: f64) -> f64 {
+        (self.maxer.update(high) + self.miner.update(low)) / 2.0
+    }
+}
+
 // SMA - Simple Moving Average
 // real = SMA(real, timeperiod=30)
 #[pyclass]
