@@ -28,3 +28,23 @@ maturin build --release
 # begin publish to pypi
 maturin publish
 ```
+
+## Todo
+
+Overlap
+- [] BBANDS - Bollinger Bands
+- [X] DEMA - Double Exponential Moving Average
+- [X] EMA - Exponential Moving Average
+- [] HT_TRENDLINE - Hilbert Transform - Instantaneous Trendline
+- [X] KAMA - Kaufman Adaptive Moving Average
+- [x] MA - Moving average, NO NEED
+- [] MAMA - MESA Adaptive Moving Average
+- [] MAVP - Moving average with variable period
+- [] MIDPOINT - MidPoint over period
+- [] MIDPRICE - Midpoint Price over period
+- [] SAR - Parabolic SAR
+- [X] SMA - Simple Moving Average
+- [X] T3 - Triple Exponential Moving Average (T3)
+- [X] TEMA - Triple Exponential Moving Average
+- [x] TRIMA - Triangular Moving Average
+- [X] WMA - Weighted Moving Average

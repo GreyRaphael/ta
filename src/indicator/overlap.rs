@@ -151,35 +151,6 @@ impl SMA {
     }
 }
 
-// TEMA: Triple Exponential Moving Average
-// NOTE: The TEMA function has an unstable period, different from talib.T3
-#[pyclass]
-pub struct TEMA {
-    ema_lv1: EMA,
-    ema_lv2: EMA,
-    ema_lv3: EMA,
-}
-
-#[pymethods]
-impl TEMA {
-    #[new]
-    pub fn new(timeperiod: usize) -> Self {
-        Self {
-            ema_lv1: EMA::new(timeperiod),
-            ema_lv2: EMA::new(timeperiod),
-            ema_lv3: EMA::new(timeperiod),
-        }
-    }
-
-    pub fn update(&mut self, new_val: f64) -> f64 {
-        let lv1 = self.ema_lv1.update(new_val);
-        let lv2 = self.ema_lv2.update(lv1);
-        let lv3 = self.ema_lv3.update(lv2);
-
-        3.0 * lv1 - 3.0 * lv2 + lv3
-    }
-}
-
 // T3 - Triple Exponential Moving Average (T3)
 // NOTE: The T3 function has an unstable period, typical vfactor is 0.7
 #[pyclass]
@@ -223,6 +194,58 @@ impl T3 {
         let lv6 = self.ema_lv6.update(lv5);
 
         self.c1 * lv6 + self.c2 * lv5 + self.c3 * lv4 + self.c4 * lv3
+    }
+}
+
+// TEMA: Triple Exponential Moving Average
+// NOTE: The TEMA function has an unstable period, different from talib.T3
+#[pyclass]
+pub struct TEMA {
+    ema_lv1: EMA,
+    ema_lv2: EMA,
+    ema_lv3: EMA,
+}
+
+#[pymethods]
+impl TEMA {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {
+            ema_lv1: EMA::new(timeperiod),
+            ema_lv2: EMA::new(timeperiod),
+            ema_lv3: EMA::new(timeperiod),
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> f64 {
+        let lv1 = self.ema_lv1.update(new_val);
+        let lv2 = self.ema_lv2.update(lv1);
+        let lv3 = self.ema_lv3.update(lv2);
+
+        3.0 * lv1 - 3.0 * lv2 + lv3
+    }
+}
+
+// TRIMA - Triangular Moving Average
+// SMA(SMA(timeperiod))
+#[pyclass]
+pub struct TRIMA {
+    sma1: SMA,
+    sma2: SMA,
+}
+
+#[pymethods]
+impl TRIMA {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {
+            sma1: SMA::new(timeperiod),
+            sma2: SMA::new(timeperiod),
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> f64 {
+        self.sma2.update(self.sma1.update(new_val))
     }
 }
 
