@@ -24,6 +24,7 @@ impl Sumer {
     pub fn update(&mut self, new_val: f64) -> f64 {
         let old_val = self.container.head();
         self.container.update(new_val);
+        // println!("{}", self.container);
 
         if is_nan_or_inf(new_val) {
             self.nan_count += 1;

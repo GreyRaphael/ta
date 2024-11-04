@@ -1,3 +1,4 @@
+use core::fmt;
 use pyo3::prelude::*;
 use std::f64::NAN;
 
@@ -40,5 +41,25 @@ impl Container {
 
     pub fn len(&self) -> usize {
         self.buf.len()
+    }
+}
+
+// just use in rust not in python
+impl Container {
+    pub fn iter(&self) -> impl Iterator<Item = &f64> {
+        (0..self.buf.len()).map(move |i| {
+            let idx = (self.head_idx + i) % self.buf.len();
+            &self.buf[idx]
+        })
+    }
+}
+
+impl fmt::Display for Container {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        // Collect the elements in logical order into a vector of strings
+        let elements: Vec<String> = self.iter().map(|&val| format!("{}", val)).collect();
+
+        // Join the elements with commas and write to the formatter
+        write!(f, "[{}]", elements.join(", "))
     }
 }
