@@ -2,7 +2,6 @@ use pyo3::prelude::*;
 pub mod container;
 mod corr;
 mod delta;
-mod ema;
 mod minmax;
 mod quantile;
 pub mod statis;
@@ -19,7 +18,6 @@ pub fn register(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
     rolling.add_class::<statis::Stder>()?;
     rolling.add_class::<statis::Skewer>()?;
     rolling.add_class::<statis::Kurter>()?;
-    rolling.add_class::<ema::EMAer>()?;
     rolling.add_class::<corr::Correlationer>()?;
     rolling.add_class::<quantile::Quantiler>()?;
     parent_module.add_submodule(&rolling)

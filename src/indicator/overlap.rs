@@ -1,18 +1,20 @@
-use crate::utils::is_nan_or_inf;
+use crate::{rolling, utils::is_nan_or_inf};
 use pyo3::prelude::*;
 use std::f64::NAN;
 
+// EMA - Exponential Moving Average
+// NOTE: The EMA function has an unstable period.
 // Cumulative Exponential Moving Average (EMA) over all data points.
 // Since EMA is already cumulative in nature, we can use it as is.
-
+// real = EMA(real, timeperiod=30)
 #[pyclass]
-pub struct EMAer {
+pub struct EMA {
     alpha: f64,
     ema: Option<f64>,
 }
 
 #[pymethods]
-impl EMAer {
+impl EMA {
     #[new]
     pub fn new(n: usize) -> Self {
         let alpha = 2.0 / (n as f64 + 1.0);
@@ -28,5 +30,26 @@ impl EMAer {
             }
         }
         self.ema.unwrap_or(NAN)
+    }
+}
+
+// SMA - Simple Moving Average
+// real = SMA(real, timeperiod=30)
+#[pyclass]
+pub struct SMA {
+    meaner: rolling::statis::Meaner,
+}
+
+#[pymethods]
+impl SMA {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {
+            meaner: rolling::statis::Meaner::new(timeperiod),
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> f64 {
+        self.meaner.update(new_val)
     }
 }
