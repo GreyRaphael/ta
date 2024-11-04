@@ -3,7 +3,9 @@ use pyo3::prelude::*;
 use std::f64::NAN;
 
 // DEMA - Double Exponential Moving Average
-// real = DEMA(real, timeperiod=30)
+// EMA1 = EMA of price
+// EMA2 = EMA of EMA1
+// DEMA = (2 x EMA1) - EMA2
 #[pyclass]
 pub struct DEMA {
     ema_lv1: EMA,
@@ -13,10 +15,10 @@ pub struct DEMA {
 #[pymethods]
 impl DEMA {
     #[new]
-    pub fn new(n: usize) -> Self {
+    pub fn new(period: usize) -> Self {
         Self {
-            ema_lv1: EMA::new(n),
-            ema_lv2: EMA::new(n),
+            ema_lv1: EMA::new(period),
+            ema_lv2: EMA::new(period),
         }
     }
 
@@ -35,7 +37,8 @@ impl DEMA {
 // The first EMA value is typically calculated using the SMA of the first 𝑛 periods in practice
 // Because the EMA gives more weight to recent prices, it can react more quickly to price changes compared to the SMA. While this is beneficial for capturing trends early
 // Also, because it can fluctuate more in response to short-term price movements, leading to potential whipsaws or false signals.
-// real = EMA(real, timeperiod=30)
+// EMA = prev_EMA x (1 – SmoothingFactor) + Price x SmoothingFactor
+// SmoothingFactor = 2 / (period + 1)
 #[pyclass]
 pub struct EMA {
     alpha: f64,
@@ -45,20 +48,22 @@ pub struct EMA {
 #[pymethods]
 impl EMA {
     #[new]
-    pub fn new(n: usize) -> Self {
-        let alpha = 2.0 / (n as f64 + 1.0);
+    pub fn new(period: usize) -> Self {
+        let alpha = 2.0 / (period as f64 + 1.0);
         Self { alpha, ema: None }
     }
 
     pub fn update(&mut self, new_val: f64) -> f64 {
-        if !is_nan_or_inf(new_val) {
+        if is_nan_or_inf(new_val) {
+            NAN
+        }else{
             if let Some(prev_ema) = self.ema {
                 self.ema = Some(prev_ema * (1.0 - self.alpha) + new_val * self.alpha);
-            } else {
+            }else{
                 self.ema = Some(new_val);
             }
+            self.ema.unwrap()
         }
-        self.ema.unwrap_or(NAN)
     }
 }
 
