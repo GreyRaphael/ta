@@ -5,7 +5,7 @@ Technical analysis library by pyo3
 ## How to develop
 
 ```bash
-# install maturin
+# install maturin or download from github
 cargo install --locked maturin
 # add ~/.cargo/bin to PATH
 maturin --help
