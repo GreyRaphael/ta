@@ -6,6 +6,9 @@ use std::f64::NAN;
 // NOTE: The EMA function has an unstable period.
 // Cumulative Exponential Moving Average (EMA) over all data points.
 // Since EMA is already cumulative in nature, we can use it as is.
+// The first EMA value is typically calculated using the SMA of the first 𝑛 periods in practice
+// Because the EMA gives more weight to recent prices, it can react more quickly to price changes compared to the SMA. While this is beneficial for capturing trends early
+// Also, because it can fluctuate more in response to short-term price movements, leading to potential whipsaws or false signals.
 // real = EMA(real, timeperiod=30)
 #[pyclass]
 pub struct EMA {
