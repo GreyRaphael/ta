@@ -112,6 +112,24 @@ impl KAMA {
     }
 }
 
+// MAMA - MESA Adaptive Moving Average, [TO DIFFICULT, must use hilbert_transform crate]
+// NOTE: The MAMA function has an unstable period.
+// mama, fama = MAMA(real, fastlimit=0, slowlimit=0)
+#[pyclass]
+pub struct MAMA {}
+
+#[pymethods]
+impl MAMA {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {}
+    }
+
+    pub fn update(&mut self, new_val: f64) -> f64 {
+        1.0
+    }
+}
+
 // SMA - Simple Moving Average
 // real = SMA(real, timeperiod=30)
 #[pyclass]
