@@ -7,8 +7,8 @@ use pyo3::prelude::*;
 
 #[pyclass]
 pub struct ADX {
-    delta_high: rolling::delta::Deltaer,
-    delta_low: rolling::delta::Deltaer,
+    high_vec: rolling::container::Container,
+    low_vec: rolling::container::Container,
     plus_dm_sumer: rolling::statis::Sumer,
     minus_dm_sumer: rolling::statis::Sumer,
     tr_sumer: rolling::statis::Sumer,
@@ -20,8 +20,8 @@ impl ADX {
     #[new]
     pub fn new(timeperiod: usize) -> Self {
         Self {
-            delta_high: rolling::delta::Deltaer::new(2),
-            delta_low: rolling::delta::Deltaer::new(2),
+            high_vec: rolling::container::Container::new(2),
+            low_vec: rolling::container::Container::new(2),
             plus_dm_sumer: rolling::statis::Sumer::new(timeperiod),
             minus_dm_sumer: rolling::statis::Sumer::new(timeperiod),
             tr_sumer: rolling::statis::Sumer::new(timeperiod),
@@ -30,18 +30,23 @@ impl ADX {
     }
 
     pub fn update(&mut self, high: f64, low: f64, preclose: f64) -> f64 {
-        let high_diff = self.delta_high.update(high);
-        let low_diff = self.delta_low.update(low);
+        self.high_vec.update(high);
+        let pre_high = self.high_vec.head();
+        self.low_vec.update(low);
+        let pre_low = self.low_vec.head();
+
+        let high_diff = high - pre_high;
+        let low_diff_reverse = pre_low - low;
 
         let plus_dm: f64;
-        if (high_diff > -1.0 * low_diff) && (high_diff > 0.0) {
+        if (high_diff > low_diff_reverse) && (high_diff > 0.0) {
             plus_dm = high_diff;
         } else {
             plus_dm = 0.0;
         }
         let minus_dm: f64;
-        if (-1.0 * low_diff > high_diff) && (low_diff < 0.0) {
-            minus_dm = -1.0 * low_diff;
+        if (low_diff_reverse > high_diff) && (low_diff_reverse > 0.0) {
+            minus_dm = low_diff_reverse;
         } else {
             minus_dm = 0.0;
         }
@@ -65,7 +70,7 @@ impl ADX {
 #[pyclass]
 pub struct ADXR {
     adxer: ADX,
-    adx_deltaer: rolling::delta::Deltaer,
+    adx_container: rolling::container::Container,
 }
 
 #[pymethods]
@@ -74,16 +79,17 @@ impl ADXR {
     pub fn new(timeperiod: usize) -> Self {
         Self {
             adxer: ADX::new(timeperiod),
-            adx_deltaer: rolling::delta::Deltaer::new(timeperiod),
+            adx_container: rolling::container::Container::new(timeperiod),
         }
     }
 
     pub fn update(&mut self, high: f64, low: f64, preclose: f64) -> f64 {
         let adx = self.adxer.update(high, low, preclose);
-        self.adx_deltaer.update(adx);
-        let tail_adx = self.adx_deltaer.tail();
-        let head_adx = self.adx_deltaer.head();
-        return (tail_adx + head_adx) / 2.0;
+        self.adx_container.update(adx);
+        let tail_adx = self.adx_container.tail();
+        let head_adx = self.adx_container.head();
+
+        (tail_adx + head_adx) / 2.0
     }
 }
 

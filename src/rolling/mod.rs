@@ -1,7 +1,7 @@
 use pyo3::prelude::*;
-mod container;
+pub mod container;
 mod corr;
-pub mod delta;
+mod delta;
 mod ema;
 mod minmax;
 mod quantile;
