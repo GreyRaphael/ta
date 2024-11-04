@@ -179,3 +179,49 @@ impl TEMA {
         3.0 * lv1 - 3.0 * lv2 + lv3
     }
 }
+
+// T3 - Triple Exponential Moving Average (T3)
+// NOTE: The T3 function has an unstable period, typical vfactor is 0.7
+#[pyclass]
+pub struct T3 {
+    ema_lv1: EMA,
+    ema_lv2: EMA,
+    ema_lv3: EMA,
+    ema_lv4: EMA,
+    ema_lv5: EMA,
+    ema_lv6: EMA,
+    c1: f64,
+    c2: f64,
+    c3: f64,
+    c4: f64,
+}
+
+#[pymethods]
+impl T3 {
+    #[new]
+    pub fn new(timeperiod: usize, vfactor: f64) -> Self {
+        Self {
+            ema_lv1: EMA::new(timeperiod),
+            ema_lv2: EMA::new(timeperiod),
+            ema_lv3: EMA::new(timeperiod),
+            ema_lv4: EMA::new(timeperiod),
+            ema_lv5: EMA::new(timeperiod),
+            ema_lv6: EMA::new(timeperiod),
+            c1: -vfactor.powi(3),
+            c2: 3.0 * vfactor.powi(2) + 3.0 * vfactor.powi(3),
+            c3: -6.0 * vfactor.powi(2) - 3.0 * vfactor - 3.0 * vfactor.powi(3),
+            c4: 1.0 + 3.0 * vfactor + 3.0 * vfactor.powi(2) + vfactor.powi(3),
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> f64 {
+        let lv1 = self.ema_lv1.update(new_val);
+        let lv2 = self.ema_lv2.update(lv1);
+        let lv3 = self.ema_lv3.update(lv2);
+        let lv4 = self.ema_lv4.update(lv3);
+        let lv5 = self.ema_lv5.update(lv4);
+        let lv6 = self.ema_lv6.update(lv5);
+
+        self.c1 * lv6 + self.c2 * lv5 + self.c3 * lv4 + self.c4 * lv3
+    }
+}
