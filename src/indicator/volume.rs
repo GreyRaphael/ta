@@ -1,5 +1,5 @@
 use super::overlap::EMA;
-use crate::rolling;
+use crate::{rolling, utils::sign};
 use pyo3::prelude::*;
 
 // AD - Chaikin A/D Line
@@ -48,5 +48,29 @@ impl ADOSC {
         let ad_value = self.ader.update(high, low, close, volume);
 
         self.ema_fast.update(ad_value) - self.ema_slow.update(ad_value)
+    }
+}
+
+// OBV - On Balance Volume
+#[pyclass]
+pub struct OBV {
+    obv_sumer: rolling::statis::Sumer,
+    close_deltaer: rolling::delta::Deltaer,
+}
+
+#[pymethods]
+impl OBV {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {
+            obv_sumer: rolling::statis::Sumer::new(timeperiod),
+            close_deltaer: rolling::delta::Deltaer::new(2),
+        }
+    }
+
+    pub fn update(&mut self, close: f64, volume: usize) -> f64 {
+        let signed_volume = sign(self.close_deltaer.update(close)) as f64 * volume as f64;
+
+        self.obv_sumer.update(signed_volume)
     }
 }
