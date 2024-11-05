@@ -48,8 +48,8 @@ Price Transform Functions
 - [x] WCLPRICE - Weighted Close Price, `real = WCLPRICE(high, low, close)`
 
 Volatility Indicator Functions
-- [] ATR - Average True Range. `real = ATR(high, low, close, timeperiod=14)`
+- [x] ATR - Average True Range. `real = ATR(high, low, close, timeperiod=14)`
   > NOTE: The ATR function has an unstable period.
-- [] NATR - Normalized Average True Range. `real = NATR(high, low, close, timeperiod=14)`. 
+- [x] NATR - Normalized Average True Range. `real = NATR(high, low, close, timeperiod=14)`. 
   > NOTE: The NATR function has an unstable period.
-- [] TRANGE - True Rang `real = TRANGE(high, low, close)`
+- [x] TRANGE - True Rang `real = TRANGE(high, low, close)`
