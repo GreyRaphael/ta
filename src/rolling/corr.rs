@@ -36,3 +36,33 @@ impl Correlationer {
         (mean_xy - mean_x * mean_y) / (sigmax_sq * sigmay_sq)
     }
 }
+
+#[pyclass]
+pub struct Beta {
+    x_meaner: Meaner,
+    x_sq_meaner: Meaner,
+    y_meaner: Meaner,
+    xy_meaner: Meaner,
+}
+
+#[pymethods]
+impl Beta {
+    #[new]
+    pub fn new(n: usize) -> Self {
+        Self {
+            x_meaner: Meaner::new(n),
+            x_sq_meaner: Meaner::new(n),
+            y_meaner: Meaner::new(n),
+            xy_meaner: Meaner::new(n),
+        }
+    }
+
+    pub fn update(&mut self, x: f64, y: f64) -> f64 {
+        let mean_x = self.x_meaner.update(x);
+        let mean_x_sq = self.x_sq_meaner.update(x * x);
+        let mean_y = self.y_meaner.update(y);
+        let mean_xy = self.xy_meaner.update(x * y);
+
+        (mean_xy - mean_x * mean_y) / (mean_x_sq - mean_x.powi(2))
+    }
+}

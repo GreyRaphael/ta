@@ -31,7 +31,7 @@ Math Operator Functions
 - [x] SUM - Summation, `real = SUM(real, timeperiod=30)`
 
 Statistic Functions
-- [] BETA - Beta, `real = BETA(real0, real1, timeperiod=5)`
+- [x] BETA - Beta, `real = BETA(real0, real1, timeperiod=5)`, equal `rolling.Beta`
 - [] CORREL - Pearson's Correlation Coefficient (r), `real = CORREL(real0, real1, timeperiod=30)`
 - [] LINEARREG - Linear Regression, `real = LINEARREG(real, timeperiod=14)`
 - [] LINEARREG_ANGLE - Linear Regression Angle, `real = LINEARREG_ANGLE(real, timeperiod=14)`
