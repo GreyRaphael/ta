@@ -1,4 +1,4 @@
-use super::statis::Meaner;
+use super::{container::Container, statis::Meaner};
 use pyo3::prelude::*;
 
 #[pyclass]
@@ -69,10 +69,10 @@ impl Beta {
 
 #[pyclass]
 pub struct TSF {
-    x_meaner: Meaner,
-    x_sq_meaner: Meaner,
+    n: usize,
     y_meaner: Meaner,
-    xy_meaner: Meaner,
+    x_sq_meaner: f64,
+    mean_x: f64,
 }
 
 #[pymethods]
@@ -80,22 +80,25 @@ impl TSF {
     #[new]
     pub fn new(n: usize) -> Self {
         Self {
-            x_meaner: Meaner::new(n),
-            x_sq_meaner: Meaner::new(n),
+            n,
             y_meaner: Meaner::new(n),
-            xy_meaner: Meaner::new(n),
+            x_sq_meaner: ((n + 1) * (2 * n + 1)) as f64 / 6.0, // (1^2+2^2+3^2+n^2)/n
+            mean_x: ((1 + n) * n) as f64 / 2.0,                // (1+n)*n/2
         }
     }
 
-    pub fn update(&mut self, x: f64, y: f64) -> f64 {
-        let mean_x = self.x_meaner.update(x);
-        let mean_x_sq = self.x_sq_meaner.update(x * x);
+    pub fn update(&mut self, y: f64) -> f64 {
         let mean_y = self.y_meaner.update(y);
-        let mean_xy = self.xy_meaner.update(x * y);
+        let sum_xy: f64 = self
+            .y_meaner
+            .iter()
+            .enumerate()
+            .map(|(i, &val)| (i as f64 + 1.0) * val)
+            .sum();
+        let slope = (sum_xy / self.n as f64 - self.mean_x * mean_y)
+            / (self.x_sq_meaner - self.mean_x.powi(2));
+        let intercept = mean_y - slope * self.mean_x;
 
-        let slope = (mean_xy - mean_x * mean_y) / (mean_x_sq - mean_x.powi(2));
-        let intercept = mean_y - slope * mean_x;
-
-        slope * x + intercept
+        slope * (self.n + 1) as f64 + intercept
     }
 }
