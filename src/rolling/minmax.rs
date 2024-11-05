@@ -82,3 +82,51 @@ impl Miner {
         }
     }
 }
+
+#[pyclass]
+pub struct MinMaxer {
+    buf: Vec<f64>,
+    cur_idx: usize,
+    nan_count: usize,
+}
+
+#[pymethods]
+impl MinMaxer {
+    #[new]
+    pub fn new(n: usize) -> Self {
+        Self {
+            buf: vec![NAN; n],
+            cur_idx: 0,
+            nan_count: n,
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> (f64, f64) {
+        let old_val = self.buf[self.cur_idx];
+        self.buf[self.cur_idx] = new_val;
+        self.cur_idx = (self.cur_idx + 1) % self.buf.len();
+
+        if new_val.is_nan() {
+            self.nan_count += 1;
+        }
+
+        if old_val.is_nan() {
+            self.nan_count -= 1;
+        }
+
+        if self.nan_count > 0 {
+            (NAN, NAN)
+        } else {
+            let min = self
+                .buf
+                .iter()
+                .fold(NAN, |max, x| if *x > max { max } else { *x });
+            let max = self
+                .buf
+                .iter()
+                .fold(NAN, |max, x| if *x < max { max } else { *x });
+
+            (min, max)
+        }
+    }
+}
