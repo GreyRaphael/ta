@@ -99,6 +99,45 @@ impl TSF {
             / (self.x_sq_meaner - self.mean_x.powi(2));
         let intercept = mean_y - slope * self.mean_x;
 
-        slope * (self.n + 1) as f64 + intercept
+        slope * (self.n + 1) as f64 + intercept // forecast n+1
+    }
+}
+
+#[pyclass]
+pub struct LinearReg {
+    n: usize,
+    y_meaner: Meaner,
+    x_sq_meaner: f64,
+    mean_x: f64,
+}
+
+#[pymethods]
+impl LinearReg {
+    #[new]
+    pub fn new(n: usize) -> Self {
+        Self {
+            n,
+            y_meaner: Meaner::new(n),
+            x_sq_meaner: ((n + 1) * (2 * n + 1)) as f64 / 6.0, // (1^2+2^2+3^2+n^2)/n
+            mean_x: ((1 + n) * n) as f64 / 2.0,                // (1+n)*n/2
+        }
+    }
+
+    pub fn update(&mut self, y: f64) -> (f64, f64, f64, f64) {
+        let mean_y = self.y_meaner.update(y);
+        let sum_xy: f64 = self
+            .y_meaner
+            .iter()
+            .enumerate()
+            .map(|(i, &val)| (i as f64 + 1.0) * val)
+            .sum();
+        let slope = (sum_xy / self.n as f64 - self.mean_x * mean_y)
+            / (self.x_sq_meaner - self.mean_x.powi(2));
+        let intercept = mean_y - slope * self.mean_x;
+
+        let last_reg = slope * self.n as f64 + intercept;
+        let angle = slope.atan();
+
+        (slope, intercept, last_reg, angle)
     }
 }
