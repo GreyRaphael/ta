@@ -46,6 +46,12 @@ impl Sumer {
     }
 }
 
+impl Sumer {
+    pub fn iter(&self) -> impl Iterator<Item = &f64> {
+        self.container.iter()
+    }
+}
+
 #[pyclass]
 pub struct Meaner {
     sumer: Sumer,
@@ -62,6 +68,12 @@ impl Meaner {
 
     pub fn update(&mut self, new_val: f64) -> f64 {
         self.sumer.update(new_val) / self.sumer.container.len() as f64
+    }
+}
+
+impl Meaner {
+    pub fn iter(&self) -> impl Iterator<Item = &f64> {
+        self.sumer.iter()
     }
 }
 
