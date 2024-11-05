@@ -117,16 +117,16 @@ impl MinMaxer {
         if self.nan_count > 0 {
             (NAN, NAN)
         } else {
-            let min = self
+            let min_val = self
                 .buf
                 .iter()
                 .fold(NAN, |max, x| if *x > max { max } else { *x });
-            let max = self
+            let max_val = self
                 .buf
                 .iter()
                 .fold(NAN, |max, x| if *x < max { max } else { *x });
 
-            (min, max)
+            (min_val, max_val)
         }
     }
 }
