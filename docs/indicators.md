@@ -40,3 +40,9 @@ Statistic Functions
 - [x] STDDEV - Standard Deviation, `real = STDDEV(real, timeperiod=5, nbdev=1)`
 - [x] TSF - Time Series Forecast, `real = TSF(real, timeperiod=14)`, equal `rolling.TSF`
 - [x] VAR - Variance, `real = VAR(real, timeperiod=5, nbdev=1)`
+
+Price Transform Functions
+- [x] AVGPRICE - Average Price, `real = AVGPRICE(open, high, low, close)`
+- [x] MEDPRICE - Median Price, `real = MEDPRICE(high, low)`
+- [x] TYPPRICE - Typical Price, `real = TYPPRICE(high, low, close)`
+- [x] WCLPRICE - Weighted Close Price, `real = WCLPRICE(high, low, close)`
