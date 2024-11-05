@@ -3,6 +3,7 @@ mod momentum;
 mod overlap;
 mod volume;
 mod price;
+mod volatility;
 
 pub fn register(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
     let indicator = PyModule::new_bound(parent_module.py(), "indicator")?;
