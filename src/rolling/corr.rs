@@ -66,3 +66,36 @@ impl Beta {
         (mean_xy - mean_x * mean_y) / (mean_x_sq - mean_x.powi(2))
     }
 }
+
+#[pyclass]
+pub struct TSF {
+    x_meaner: Meaner,
+    x_sq_meaner: Meaner,
+    y_meaner: Meaner,
+    xy_meaner: Meaner,
+}
+
+#[pymethods]
+impl TSF {
+    #[new]
+    pub fn new(n: usize) -> Self {
+        Self {
+            x_meaner: Meaner::new(n),
+            x_sq_meaner: Meaner::new(n),
+            y_meaner: Meaner::new(n),
+            xy_meaner: Meaner::new(n),
+        }
+    }
+
+    pub fn update(&mut self, x: f64, y: f64) -> f64 {
+        let mean_x = self.x_meaner.update(x);
+        let mean_x_sq = self.x_sq_meaner.update(x * x);
+        let mean_y = self.y_meaner.update(y);
+        let mean_xy = self.xy_meaner.update(x * y);
+
+        let slope = (mean_xy - mean_x * mean_y) / (mean_x_sq - mean_x.powi(2));
+        let intercept = mean_y - slope * mean_x;
+
+        slope * x + intercept
+    }
+}

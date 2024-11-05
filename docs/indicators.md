@@ -32,11 +32,11 @@ Math Operator Functions
 
 Statistic Functions
 - [x] BETA - Beta, `real = BETA(real0, real1, timeperiod=5)`, equal `rolling.Beta`
-- [] CORREL - Pearson's Correlation Coefficient (r), `real = CORREL(real0, real1, timeperiod=30)`
+- [x] CORREL - Pearson's Correlation Coefficient (r), `real = CORREL(real0, real1, timeperiod=30)`
 - [] LINEARREG - Linear Regression, `real = LINEARREG(real, timeperiod=14)`
 - [] LINEARREG_ANGLE - Linear Regression Angle, `real = LINEARREG_ANGLE(real, timeperiod=14)`
 - [] LINEARREG_INTERCEPT - Linear Regression Intercept, `real = LINEARREG_INTERCEPT(real, timeperiod=14)`
 - [] LINEARREG_SLOPE - Linear Regression Slope, `real = LINEARREG_SLOPE(real, timeperiod=14)`
-- [] STDDEV - Standard Deviation, `real = STDDEV(real, timeperiod=5, nbdev=1)`
-- [] TSF - Time Series Forecast, `real = TSF(real, timeperiod=14)`
-- [] VAR - Variance, `real = VAR(real, timeperiod=5, nbdev=1)`
+- [x] STDDEV - Standard Deviation, `real = STDDEV(real, timeperiod=5, nbdev=1)`
+- [x] TSF - Time Series Forecast, `real = TSF(real, timeperiod=14)`, equal `rolling.TSF`
+- [x] VAR - Variance, `real = VAR(real, timeperiod=5, nbdev=1)`
