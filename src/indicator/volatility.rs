@@ -1,19 +1,25 @@
-use std::f64::NAN;
-
+use crate::rolling;
 use pyo3::prelude::*;
+use std::f64::NAN;
 
 // True Range
 #[pyclass]
-pub struct TR {}
+pub struct TR {
+    close_vec: rolling::container::Container,
+}
 
 #[pymethods]
 impl TR {
     #[new]
     pub fn new() -> Self {
-        Self {}
+        Self {
+            close_vec: rolling::container::Container::new(2),
+        }
     }
 
-    pub fn update(&mut self, high: f64, low: f64, preclose: f64) -> f64 {
+    pub fn update(&mut self, high: f64, low: f64, close: f64) -> f64 {
+        self.close_vec.update(close);
+        let preclose = self.close_vec.head();
         (high - low)
             .max((high - preclose).abs())
             .max((low - preclose).abs())
@@ -26,6 +32,7 @@ pub struct ATR {
     n: usize,
     atr: Option<f64>,
     init_trs: Vec<f64>,
+    close_vec: rolling::container::Container,
 }
 
 #[pymethods]
@@ -36,10 +43,13 @@ impl ATR {
             n: period,
             atr: None,
             init_trs: Vec::with_capacity(period),
+            close_vec: rolling::container::Container::new(2),
         }
     }
 
-    pub fn update(&mut self, high: f64, low: f64, preclose: f64) -> f64 {
+    pub fn update(&mut self, high: f64, low: f64, close: f64) -> f64 {
+        self.close_vec.update(close);
+        let preclose = self.close_vec.head();
         let tr = (high - low)
             .max((high - preclose).abs())
             .max((low - preclose).abs());
@@ -62,6 +72,7 @@ pub struct NATR {
     n: usize,
     atr: Option<f64>,
     init_trs: Vec<f64>,
+    close_vec: rolling::container::Container,
 }
 
 #[pymethods]
@@ -72,10 +83,13 @@ impl NATR {
             n: period,
             atr: None,
             init_trs: Vec::with_capacity(period),
+            close_vec: rolling::container::Container::new(2),
         }
     }
 
-    pub fn update(&mut self, high: f64, low: f64, preclose: f64, close: f64) -> f64 {
+    pub fn update(&mut self, high: f64, low: f64, close: f64) -> f64 {
+        self.close_vec.update(close);
+        let preclose = self.close_vec.head();
         let tr = (high - low)
             .max((high - preclose).abs())
             .max((low - preclose).abs());
