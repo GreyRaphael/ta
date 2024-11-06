@@ -81,10 +81,10 @@ Momentum Indicator Functions
 - [] PLUS_DI - Plus Directional Indicator, `real = PLUS_DI(high, low, close, timeperiod=14)`
 - [] PLUS_DM - Plus Directional Movement, `real = PLUS_DM(high, low, timeperiod=14)`
 - [] PPO - Percentage Price Oscillator, `real = PPO(real, fastperiod=12, slowperiod=26, matype=0)`
-- [] ROC - Rate of change : ((price/prevPrice)-1)*100, `real = ROC(real, timeperiod=10)`
-- [] ROCP - Rate of change Percentage: (price-prevPrice)/prevPrice, `real = ROCP(real, timeperiod=10)`
-- [] ROCR - Rate of change ratio: (price/prevPrice), `real = ROCR(real, timeperiod=10)`
-- [] ROCR100 - Rate of change ratio 100 scale: (price/prevPrice)*100, `real = ROCR100(real, timeperiod=10)`
+- [x] ROC - Rate of change : ((price/prevPrice)-1)*100, `real = ROC(real, timeperiod=10)`
+- [x] ROCP - Rate of change Percentage: (price-prevPrice)/prevPrice, `real = ROCP(real, timeperiod=10)`
+- [x] ROCR - Rate of change ratio: (price/prevPrice), `real = ROCR(real, timeperiod=10)`
+- [x] ROCR100 - Rate of change ratio 100 scale: (price/prevPrice)*100, `real = ROCR100(real, timeperiod=10)`
 - [x] RSI - Relative Strength Index, `real = RSI(real, timeperiod=14)`
 - [] STOCH - Stochastic, `slowk, slowd = STOCH(high, low, close, fastk_period=5, slowk_period=3, slowk_matype=0, slowd_period=3, slowd_matype=0)`
 - [] STOCHF - Stochastic Fast, `fastk, fastd = STOCHF(high, low, close, fastk_period=5, fastd_period=3, fastd_matype=0)`

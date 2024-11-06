@@ -95,6 +95,46 @@ impl ADXR {
 }
 
 #[pyclass]
+pub struct ROC {
+    pctchanger: rolling::delta::Pctchanger,
+}
+
+#[pymethods]
+impl ROC {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {
+            pctchanger: rolling::delta::Pctchanger::new(timeperiod),
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> f64 {
+        self.pctchanger.update(new_val)
+    }
+}
+
+#[pyclass]
+pub struct ROCR {
+    container: rolling::container::Container,
+}
+
+#[pymethods]
+impl ROCR {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {
+            container: rolling::container::Container::new(timeperiod),
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> f64 {
+        self.container.update(new_val);
+
+        self.container.tail() / self.container.head()
+    }
+}
+
+#[pyclass]
 pub struct RSI {
     price_deltaer: rolling::delta::Deltaer,
     up_moves: rolling::statis::Sumer,
