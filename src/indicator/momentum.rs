@@ -1,3 +1,4 @@
+use super::overlap::EMA;
 use crate::{max, rolling};
 use pyo3::prelude::*;
 
@@ -90,6 +91,35 @@ impl ADXR {
         let head_adx = self.adx_container.head();
 
         (tail_adx + head_adx) / 2.0
+    }
+}
+
+#[pyclass]
+pub struct TRIX {
+    ema_lv1: EMA,
+    ema_lv2: EMA,
+    ema_lv3: EMA,
+    ema_lv3_pctc: rolling::delta::Pctchanger,
+}
+
+#[pymethods]
+impl TRIX {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {
+            ema_lv1: EMA::new(timeperiod),
+            ema_lv2: EMA::new(timeperiod),
+            ema_lv3: EMA::new(timeperiod),
+            ema_lv3_pctc: rolling::delta::Pctchanger::new(2),
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> f64 {
+        let lv1 = self.ema_lv1.update(new_val);
+        let lv2 = self.ema_lv2.update(lv1);
+        let lv3 = self.ema_lv3.update(lv2);
+
+        self.ema_lv3_pctc.update(lv3)
     }
 }
 
