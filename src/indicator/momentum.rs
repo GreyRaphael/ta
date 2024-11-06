@@ -160,6 +160,31 @@ impl BOP {
 }
 
 #[pyclass]
+pub struct CCI {
+    tp_meaner: rolling::statis::Meaner,
+    tp_meandever: rolling::statis::Meaner,
+}
+
+#[pymethods]
+impl CCI {
+    #[new]
+    pub fn new(period: usize) -> Self {
+        Self {
+            tp_meaner: rolling::statis::Meaner::new(period),
+            tp_meandever: rolling::statis::Meaner::new(period),
+        }
+    }
+
+    pub fn update(&mut self, high: f64, low: f64, close: f64) -> f64 {
+        let tp = (high + low + close) / 3.0;
+        let tp_avg = self.tp_meaner.update(tp);
+        let tp_meandev = self.tp_meandever.update((tp - tp_avg).abs());
+
+        (tp - tp_avg) / (0.015 * tp_meandev)
+    }
+}
+
+#[pyclass]
 pub struct MinusDM {
     high_vec: rolling::container::Container,
     low_vec: rolling::container::Container,
