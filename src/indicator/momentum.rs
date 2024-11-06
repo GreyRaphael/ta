@@ -95,6 +95,46 @@ impl ADXR {
 }
 
 #[pyclass]
+pub struct RSI {
+    price_deltaer: rolling::delta::Deltaer,
+    up_moves: rolling::statis::Sumer,
+    down_moves: rolling::statis::Sumer,
+    up_smoother: EMA,
+    down_smoother: EMA,
+}
+
+#[pymethods]
+impl RSI {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {
+            price_deltaer: rolling::delta::Deltaer::new(2),
+            up_moves: rolling::statis::Sumer::new(timeperiod),
+            down_moves: rolling::statis::Sumer::new(timeperiod),
+            up_smoother: EMA::new(timeperiod),
+            down_smoother: EMA::new(timeperiod),
+        }
+    }
+
+    pub fn update(&mut self, price: f64) -> f64 {
+        let delta = self.price_deltaer.update(price);
+        let up_sum;
+        let down_sum;
+        if delta > 0.0 {
+            up_sum = self.up_moves.update(delta.abs());
+            down_sum = self.down_moves.update(0.0);
+        } else {
+            up_sum = self.up_moves.update(0.0);
+            down_sum = self.down_moves.update(delta.abs());
+        }
+
+        let rs = self.up_smoother.update(up_sum) / self.down_smoother.update(down_sum);
+
+        rs / (1.0 + rs)
+    }
+}
+
+#[pyclass]
 pub struct TRIX {
     ema_lv1: EMA,
     ema_lv2: EMA,
