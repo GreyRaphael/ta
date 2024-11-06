@@ -219,6 +219,30 @@ impl CMO {
 }
 
 #[pyclass]
+pub struct DX {
+    plus_dier: PlusDI,
+    minus_dier: MinusDI,
+}
+
+#[pymethods]
+impl DX {
+    #[new]
+    pub fn new(period: usize) -> Self {
+        Self {
+            plus_dier: PlusDI::new(period),
+            minus_dier: MinusDI::new(period),
+        }
+    }
+
+    pub fn update(&mut self, high: f64, low: f64, close: f64) -> f64 {
+        let plus_di = self.plus_dier.update(high, low, close);
+        let minus_di = self.minus_dier.update(high, low, close);
+
+        (plus_di - minus_di).abs() / (plus_di + minus_di)
+    }
+}
+
+#[pyclass]
 pub struct MinusDM {
     high_vec: rolling::container::Container,
     low_vec: rolling::container::Container,
