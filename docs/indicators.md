@@ -77,7 +77,7 @@ Momentum Indicator Functions
 - [] MFI - Money Flow Index, `real = MFI(high, low, close, volume, timeperiod=14)`
 - [x] MINUS_DI - Minus Directional Indicator, `real = MINUS_DI(high, low, close, timeperiod=14)`
 - [x] MINUS_DM - Minus Directional Movement, `real = MINUS_DM(high, low, timeperiod=14)`
-- [] MOM - Momentum, `real = MOM(real, timeperiod=10)`
+- [x] MOM - Momentum, `real = MOM(real, timeperiod=10)`
 - [x] PLUS_DI - Plus Directional Indicator, `real = PLUS_DI(high, low, close, timeperiod=14)`
 - [x] PLUS_DM - Plus Directional Movement, `real = PLUS_DM(high, low, timeperiod=14)`
 - [] PPO - Percentage Price Oscillator, `real = PPO(real, fastperiod=12, slowperiod=26, matype=0)`

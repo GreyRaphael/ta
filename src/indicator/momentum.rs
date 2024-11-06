@@ -223,6 +223,25 @@ impl MinusDI {
 }
 
 #[pyclass]
+pub struct MOM {
+    deltaer: rolling::delta::Deltaer,
+}
+
+#[pymethods]
+impl MOM {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {
+            deltaer: rolling::delta::Deltaer::new(timeperiod),
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> f64 {
+        self.deltaer.update(new_val)
+    }
+}
+
+#[pyclass]
 pub struct ROC {
     pctchanger: rolling::delta::Pctchanger,
 }
