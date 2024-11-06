@@ -223,6 +223,42 @@ impl MinusDI {
 }
 
 #[pyclass]
+pub struct MFI {
+    pos_mfer: rolling::statis::Sumer,
+    neg_mfer: rolling::statis::Sumer,
+    tp_deltaer: rolling::delta::Deltaer,
+}
+
+#[pymethods]
+impl MFI {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {
+            pos_mfer: rolling::statis::Sumer::new(timeperiod),
+            neg_mfer: rolling::statis::Sumer::new(timeperiod),
+            tp_deltaer: rolling::delta::Deltaer::new(2),
+        }
+    }
+
+    pub fn update(&mut self, high: f64, low: f64, close: f64, volume: f64) -> f64 {
+        let typical_price = (high + low + close) / 3.0;
+        let tp_diff = self.tp_deltaer.update(typical_price);
+        let pos_mf;
+        let neg_mf;
+        if tp_diff > 0.0 {
+            pos_mf = self.pos_mfer.update(typical_price * volume);
+            neg_mf = self.neg_mfer.update(0.0);
+        } else {
+            pos_mf = self.pos_mfer.update(0.0);
+            neg_mf = self.neg_mfer.update(typical_price * volume);
+        }
+        let mfr = pos_mf / neg_mf;
+
+        mfr / (mfr + 1.0)
+    }
+}
+
+#[pyclass]
 pub struct MOM {
     deltaer: rolling::delta::Deltaer,
 }

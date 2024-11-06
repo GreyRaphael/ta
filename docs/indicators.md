@@ -74,7 +74,7 @@ Momentum Indicator Functions
 - [] MACD - Moving Average Convergence/Divergence, `macd, macdsignal, macdhist = MACD(real, fastperiod=12, slowperiod=26, signalperiod=9)`
 - [] MACDEXT - MACD with controllable MA type, `macd, macdsignal, macdhist = MACDEXT(real, fastperiod=12, fastmatype=0, slowperiod=26, slowmatype=0, signalperiod=9, signalmatype=0)`
 - [] MACDFIX - Moving Average Convergence/Divergence Fix 12/26, `macd, macdsignal, macdhist = MACDFIX(real, signalperiod=9)`
-- [] MFI - Money Flow Index, `real = MFI(high, low, close, volume, timeperiod=14)`
+- [x] MFI - Money Flow Index, `real = MFI(high, low, close, volume, timeperiod=14)`
 - [x] MINUS_DI - Minus Directional Indicator, `real = MINUS_DI(high, low, close, timeperiod=14)`
 - [x] MINUS_DM - Minus Directional Movement, `real = MINUS_DM(high, low, timeperiod=14)`
 - [x] MOM - Momentum, `real = MOM(real, timeperiod=10)`
