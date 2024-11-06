@@ -95,6 +95,56 @@ impl ADXR {
 }
 
 #[pyclass]
+pub struct Aroon {
+    high_maxidxer: rolling::minmax::MaxIndexer,
+    low_minidxer: rolling::minmax::MinIndexer,
+    period: usize,
+}
+
+#[pymethods]
+impl Aroon {
+    #[new]
+    pub fn new(period: usize) -> Self {
+        Self {
+            high_maxidxer: rolling::minmax::MaxIndexer::new(period),
+            low_minidxer: rolling::minmax::MinIndexer::new(period),
+            period,
+        }
+    }
+
+    pub fn update(&mut self, high: f64, low: f64) -> (f64, f64) {
+        let (max_high_idx, _) = self.high_maxidxer.update(high);
+        let (min_low_idx, _) = self.low_minidxer.update(low);
+
+        let aroon_up = max_high_idx as f64 / self.period as f64;
+        let aroon_down = min_low_idx as f64 / self.period as f64;
+
+        (aroon_up, aroon_down)
+    }
+}
+
+#[pyclass]
+pub struct AroonOsc {
+    aroon: Aroon,
+}
+
+#[pymethods]
+impl AroonOsc {
+    #[new]
+    pub fn new(period: usize) -> Self {
+        Self {
+            aroon: Aroon::new(period),
+        }
+    }
+
+    pub fn update(&mut self, high: f64, low: f64) -> f64 {
+        let (aroon_up, aroon_down) = self.aroon.update(high, low);
+
+        aroon_up - aroon_down
+    }
+}
+
+#[pyclass]
 pub struct BOP {}
 
 #[pymethods]
