@@ -20,10 +20,12 @@ impl Container {
         }
     }
 
-    pub fn update(&mut self, new_val: f64) {
+    pub fn update(&mut self, new_val: f64) -> (f64, f64) {
         self.tail_idx = self.head_idx;
         self.buf[self.tail_idx] = new_val;
         self.head_idx = (self.head_idx + 1) % self.buf.len();
+
+        (self.buf[self.head_idx], self.buf[self.tail_idx])
     }
 
     pub fn get(&self, idx: usize) -> f64 {

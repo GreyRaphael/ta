@@ -95,6 +95,78 @@ impl ADXR {
 }
 
 #[pyclass]
+pub struct MinusDM {
+    high_vec: rolling::container::Container,
+    low_vec: rolling::container::Container,
+    minus_dm_sumer: rolling::statis::Sumer,
+}
+
+#[pymethods]
+impl MinusDM {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {
+            high_vec: rolling::container::Container::new(2),
+            low_vec: rolling::container::Container::new(2),
+            minus_dm_sumer: rolling::statis::Sumer::new(timeperiod),
+        }
+    }
+
+    pub fn update(&mut self, high: f64, low: f64) -> f64 {
+        let (pre_high, _) = self.high_vec.update(high);
+        let (pre_low, _) = self.low_vec.update(low);
+
+        let high_diff = high - pre_high;
+        let low_diff_reverse = pre_low - low;
+
+        let minus_dm: f64;
+        if (low_diff_reverse > high_diff) && (low_diff_reverse > 0.0) {
+            minus_dm = low_diff_reverse;
+        } else {
+            minus_dm = 0.0;
+        }
+
+        self.minus_dm_sumer.update(minus_dm)
+    }
+}
+
+#[pyclass]
+pub struct PlusDM {
+    high_vec: rolling::container::Container,
+    low_vec: rolling::container::Container,
+    plus_dm_sumer: rolling::statis::Sumer,
+}
+
+#[pymethods]
+impl PlusDM {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {
+            high_vec: rolling::container::Container::new(2),
+            low_vec: rolling::container::Container::new(2),
+            plus_dm_sumer: rolling::statis::Sumer::new(timeperiod),
+        }
+    }
+
+    pub fn update(&mut self, high: f64, low: f64) -> f64 {
+        let (pre_high, _) = self.high_vec.update(high);
+        let (pre_low, _) = self.low_vec.update(low);
+
+        let high_diff = high - pre_high;
+        let low_diff_reverse = pre_low - low;
+
+        let plus_dm: f64;
+        if (high_diff > low_diff_reverse) && (high_diff > 0.0) {
+            plus_dm = high_diff;
+        } else {
+            plus_dm = 0.0;
+        }
+
+        self.plus_dm_sumer.update(plus_dm)
+    }
+}
+
+#[pyclass]
 pub struct ROC {
     pctchanger: rolling::delta::Pctchanger,
 }

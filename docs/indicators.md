@@ -76,10 +76,10 @@ Momentum Indicator Functions
 - [] MACDFIX - Moving Average Convergence/Divergence Fix 12/26, `macd, macdsignal, macdhist = MACDFIX(real, signalperiod=9)`
 - [] MFI - Money Flow Index, `real = MFI(high, low, close, volume, timeperiod=14)`
 - [] MINUS_DI - Minus Directional Indicator, `real = MINUS_DI(high, low, close, timeperiod=14)`
-- [] MINUS_DM - Minus Directional Movement, `real = MINUS_DM(high, low, timeperiod=14)`
+- [x] MINUS_DM - Minus Directional Movement, `real = MINUS_DM(high, low, timeperiod=14)`
 - [] MOM - Momentum, `real = MOM(real, timeperiod=10)`
 - [] PLUS_DI - Plus Directional Indicator, `real = PLUS_DI(high, low, close, timeperiod=14)`
-- [] PLUS_DM - Plus Directional Movement, `real = PLUS_DM(high, low, timeperiod=14)`
+- [x] PLUS_DM - Plus Directional Movement, `real = PLUS_DM(high, low, timeperiod=14)`
 - [] PPO - Percentage Price Oscillator, `real = PPO(real, fastperiod=12, slowperiod=26, matype=0)`
 - [x] ROC - Rate of change : ((price/prevPrice)-1)*100, `real = ROC(real, timeperiod=10)`
 - [x] ROCP - Rate of change Percentage: (price-prevPrice)/prevPrice, `real = ROCP(real, timeperiod=10)`
