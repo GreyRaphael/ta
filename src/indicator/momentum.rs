@@ -185,6 +185,40 @@ impl CCI {
 }
 
 #[pyclass]
+pub struct CMO {
+    close_deltaer: rolling::delta::Deltaer,
+    gain_sumer: rolling::statis::Sumer,
+    loss_sumer: rolling::statis::Sumer,
+}
+
+#[pymethods]
+impl CMO {
+    #[new]
+    pub fn new(period: usize) -> Self {
+        Self {
+            close_deltaer: rolling::delta::Deltaer::new(2),
+            gain_sumer: rolling::statis::Sumer::new(period),
+            loss_sumer: rolling::statis::Sumer::new(period),
+        }
+    }
+
+    pub fn update(&mut self, close: f64) -> f64 {
+        let close_delta = self.close_deltaer.update(close);
+        let up;
+        let down;
+        if close_delta > 0.0 {
+            up = self.gain_sumer.update(close_delta);
+            down = self.loss_sumer.update(0.0);
+        } else {
+            up = self.gain_sumer.update(0.0);
+            down = self.loss_sumer.update(close_delta.abs());
+        }
+
+        (up - down) / (up + down)
+    }
+}
+
+#[pyclass]
 pub struct MinusDM {
     high_vec: rolling::container::Container,
     low_vec: rolling::container::Container,
