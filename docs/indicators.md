@@ -53,3 +53,42 @@ Volatility Indicator Functions
 - [x] NATR - Normalized Average True Range. `real = NATR(high, low, close, timeperiod=14)`. 
   > NOTE: The NATR function has an unstable period.
 - [x] TRANGE - True Rang `real = TRANGE(high, low, close)`
+
+Cycle Indicator Functions
+- [] HT_DCPERIOD - Hilbert Transform - Dominant Cycle Period, `real = HT_DCPERIOD(real)`
+- [] HT_DCPHASE - Hilbert Transform - Dominant Cycle Phase, `real = HT_DCPHASE(real)`
+- [] HT_PHASOR - Hilbert Transform - Phasor Components, `inphase, quadrature = HT_PHASOR(real)`
+- [] HT_SINE - Hilbert Transform - SineWave, `sine, leadsine = HT_SINE(real)`
+- [] HT_TRENDMODE - Hilbert Transform - Trend vs Cycle Mode, `integer = HT_TRENDMODE(real)`
+
+Momentum Indicator Functions
+- [x] ADX - Average Directional Movement Index, `real = ADX(high, low, close, timeperiod=14)`
+- [x] ADXR - Average Directional Movement Index Rating, `real = ADXR(high, low, close, timeperiod=14)`
+- [] APO - Absolute Price Oscillator, `real = APO(real, fastperiod=12, slowperiod=26, matype=0)`
+- [] AROON - Aroon, `aroondown, aroonup = AROON(high, low, timeperiod=14)`
+- [] AROONOSC - Aroon Oscillator, `real = AROONOSC(high, low, timeperiod=14)`
+- [] BOP - Balance Of Power, `real = BOP(open, high, low, close)`
+- [] CCI - Commodity Channel Index, `real = CCI(high, low, close, timeperiod=14)`
+- [] CMO - Chande Momentum Oscillator, `real = CMO(real, timeperiod=14)`
+- [] DX - Directional Movement Index, `real = DX(high, low, close, timeperiod=14)`
+- [] MACD - Moving Average Convergence/Divergence, `macd, macdsignal, macdhist = MACD(real, fastperiod=12, slowperiod=26, signalperiod=9)`
+- [] MACDEXT - MACD with controllable MA type, `macd, macdsignal, macdhist = MACDEXT(real, fastperiod=12, fastmatype=0, slowperiod=26, slowmatype=0, signalperiod=9, signalmatype=0)`
+- [] MACDFIX - Moving Average Convergence/Divergence Fix 12/26, `macd, macdsignal, macdhist = MACDFIX(real, signalperiod=9)`
+- [] MFI - Money Flow Index, `real = MFI(high, low, close, volume, timeperiod=14)`
+- [] MINUS_DI - Minus Directional Indicator, `real = MINUS_DI(high, low, close, timeperiod=14)`
+- [] MINUS_DM - Minus Directional Movement, `real = MINUS_DM(high, low, timeperiod=14)`
+- [] MOM - Momentum, `real = MOM(real, timeperiod=10)`
+- [] PLUS_DI - Plus Directional Indicator, `real = PLUS_DI(high, low, close, timeperiod=14)`
+- [] PLUS_DM - Plus Directional Movement, `real = PLUS_DM(high, low, timeperiod=14)`
+- [] PPO - Percentage Price Oscillator, `real = PPO(real, fastperiod=12, slowperiod=26, matype=0)`
+- [] ROC - Rate of change : ((price/prevPrice)-1)*100, `real = ROC(real, timeperiod=10)`
+- [] ROCP - Rate of change Percentage: (price-prevPrice)/prevPrice, `real = ROCP(real, timeperiod=10)`
+- [] ROCR - Rate of change ratio: (price/prevPrice), `real = ROCR(real, timeperiod=10)`
+- [] ROCR100 - Rate of change ratio 100 scale: (price/prevPrice)*100, `real = ROCR100(real, timeperiod=10)`
+- [] RSI - Relative Strength Index, `real = RSI(real, timeperiod=14)`
+- [] STOCH - Stochastic, `slowk, slowd = STOCH(high, low, close, fastk_period=5, slowk_period=3, slowk_matype=0, slowd_period=3, slowd_matype=0)`
+- [] STOCHF - Stochastic Fast, `fastk, fastd = STOCHF(high, low, close, fastk_period=5, fastd_period=3, fastd_matype=0)`
+- [] STOCHRSI - Stochastic Relative Strength Index, `fastk, fastd = STOCHRSI(real, timeperiod=14, fastk_period=5, fastd_period=3, fastd_matype=0)`
+- [] TRIX - 1-day Rate-Of-Change (ROC) of a Triple Smooth EMA, `real = TRIX(real, timeperiod=30)`
+- [x] ULTOSC - Ultimate Oscillator, `real = ULTOSC(high, low, close, timeperiod1=7, timeperiod2=14, timeperiod3=28)`
+- [x] WILLR - Williams' %R, `real = WILLR(high, low, close, timeperiod=14)`

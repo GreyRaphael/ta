@@ -133,3 +133,27 @@ impl ULTOSC {
         100.0 * (4.0 * timeperiod1_bp_avg + 2.0 * timeperiod2_bp_avg + timeperiod3_bp_avg) / 7.0
     }
 }
+
+#[pyclass]
+pub struct WILLR {
+    high_maxer: rolling::minmax::Maxer,
+    low_miner: rolling::minmax::Miner,
+}
+
+#[pymethods]
+impl WILLR {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {
+            high_maxer: rolling::minmax::Maxer::new(timeperiod),
+            low_miner: rolling::minmax::Miner::new(timeperiod),
+        }
+    }
+
+    pub fn update(&mut self, high: f64, low: f64, close: f64) -> f64 {
+        let high_max = self.high_maxer.update(high);
+        let low_min = self.low_miner.update(low);
+
+        (high_max - close) / (high_max - low_min)
+    }
+}
