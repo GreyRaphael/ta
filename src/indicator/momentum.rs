@@ -167,6 +167,62 @@ impl PlusDM {
 }
 
 #[pyclass]
+pub struct PlusDI {
+    plus_dmer: PlusDM,
+    tr_sumer: rolling::statis::Sumer,
+    close_container: rolling::container::Container,
+}
+
+#[pymethods]
+impl PlusDI {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {
+            plus_dmer: PlusDM::new(timeperiod),
+            tr_sumer: rolling::statis::Sumer::new(timeperiod),
+            close_container: rolling::container::Container::new(2),
+        }
+    }
+
+    pub fn update(&mut self, high: f64, low: f64, close: f64) -> f64 {
+        let (preclose, _) = self.close_container.update(close);
+        let smoothed_plus_dm = self.plus_dmer.update(high, low);
+        let tr = max!(high - low, (high - preclose).abs(), (low - preclose).abs());
+        let smoothed_tr = self.tr_sumer.update(tr);
+
+        100.0 * smoothed_plus_dm / smoothed_tr
+    }
+}
+
+#[pyclass]
+pub struct MinusDI {
+    minus_dmer: MinusDM,
+    tr_sumer: rolling::statis::Sumer,
+    close_container: rolling::container::Container,
+}
+
+#[pymethods]
+impl MinusDI {
+    #[new]
+    pub fn new(timeperiod: usize) -> Self {
+        Self {
+            minus_dmer: MinusDM::new(timeperiod),
+            tr_sumer: rolling::statis::Sumer::new(timeperiod),
+            close_container: rolling::container::Container::new(2),
+        }
+    }
+
+    pub fn update(&mut self, high: f64, low: f64, close: f64) -> f64 {
+        let (preclose, _) = self.close_container.update(close);
+        let smoothed_minus_dm = self.minus_dmer.update(high, low);
+        let tr = max!(high - low, (high - preclose).abs(), (low - preclose).abs());
+        let smoothed_tr = self.tr_sumer.update(tr);
+
+        100.0 * smoothed_minus_dm / smoothed_tr
+    }
+}
+
+#[pyclass]
 pub struct ROC {
     pctchanger: rolling::delta::Pctchanger,
 }
