@@ -95,6 +95,21 @@ impl ADXR {
 }
 
 #[pyclass]
+pub struct BOP {}
+
+#[pymethods]
+impl BOP {
+    #[new]
+    pub fn new() -> Self {
+        Self {}
+    }
+
+    pub fn update(&mut self, open: f64, high: f64, low: f64, close: f64) -> f64 {
+        (close - open) / (high - low)
+    }
+}
+
+#[pyclass]
 pub struct MinusDM {
     high_vec: rolling::container::Container,
     low_vec: rolling::container::Container,
