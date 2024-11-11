@@ -321,6 +321,41 @@ impl KDJ {
     }
 }
 
+// KST Oscillator: ROC10 + 2*ROC15 + 3*ROC20 + 4*ROC30
+#[pyclass]
+pub struct KST {
+    ptchanger: rolling::delta::Pctchanger,
+    max_period: usize,
+}
+
+#[pymethods]
+impl KST {
+    #[new]
+    pub fn new(max_period: usize) -> Self {
+        Self {
+            ptchanger: rolling::delta::Pctchanger::new(max_period),
+            max_period,
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> f64 {
+        self.ptchanger.update(new_val);
+
+        let roc10 = self.ptchanger.partial(self.max_period - 9, self.max_period);
+        let roc15 = self
+            .ptchanger
+            .partial(self.max_period - 14, self.max_period);
+        let roc20 = self
+            .ptchanger
+            .partial(self.max_period - 19, self.max_period);
+        let roc30 = self
+            .ptchanger
+            .partial(self.max_period - 29, self.max_period);
+
+        roc10 + 2.0 * roc15 + 3.0 * roc20 + 4.0 * roc30
+    }
+}
+
 #[pyclass]
 pub struct MACD {
     fast_ema: EMA,

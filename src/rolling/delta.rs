@@ -32,6 +32,10 @@ impl Deltaer {
     pub fn tail(&self) -> f64 {
         self.container.tail()
     }
+
+    pub fn partial(&self, start: usize, end: usize) -> f64 {
+        self.get(end) - self.get(start)
+    }
 }
 
 #[pyclass]
@@ -64,5 +68,9 @@ impl Pctchanger {
 
     pub fn tail(&self) -> f64 {
         self.container.tail()
+    }
+
+    pub fn partial(&self, start: usize, end: usize) -> f64 {
+        self.get(end) / self.get(start) - 1.0
     }
 }
