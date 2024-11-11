@@ -80,7 +80,7 @@ Momentum Indicator Functions
 - [x] MOM - Momentum, `real = MOM(real, timeperiod=10)`
 - [x] PLUS_DI - Plus Directional Indicator, `real = PLUS_DI(high, low, close, timeperiod=14)`
 - [x] PLUS_DM - Plus Directional Movement, `real = PLUS_DM(high, low, timeperiod=14)`
-- [] PPO - Percentage Price Oscillator, `real = PPO(real, fastperiod=12, slowperiod=26, matype=0)`
+- [x] PPO - Percentage Price Oscillator, `real = PPO(real, fastperiod=12, slowperiod=26, matype=0)`
 - [x] ROC - Rate of change : ((price/prevPrice)-1)*100, `real = ROC(real, timeperiod=10)`
 - [x] ROCP - Rate of change Percentage: (price-prevPrice)/prevPrice, `real = ROCP(real, timeperiod=10)`
 - [x] ROCR - Rate of change ratio: (price/prevPrice), `real = ROCR(real, timeperiod=10)`

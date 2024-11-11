@@ -570,6 +570,27 @@ impl MOM {
 }
 
 #[pyclass]
+pub struct PPO {
+    fast_emaer: EMA,
+    slow_emaer: EMA,
+}
+
+#[pymethods]
+impl PPO {
+    #[new]
+    pub fn new(fast_period: usize, slow_period: usize) -> Self {
+        Self {
+            fast_emaer: EMA::new(fast_period),
+            slow_emaer: EMA::new(slow_period),
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> f64 {
+        self.fast_emaer.update(new_val) / self.slow_emaer.update(new_val) - 1.0
+    }
+}
+
+#[pyclass]
 pub struct ROC {
     pctchanger: rolling::delta::Pctchanger,
 }
