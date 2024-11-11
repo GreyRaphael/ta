@@ -26,16 +26,16 @@ impl Sumer {
         self.container.update(new_val);
         // println!("{}", self.container);
 
-        if is_nan_or_inf(new_val) {
-            self.nan_count += 1;
-        } else {
-            self.sum += new_val;
-        }
-
         if is_nan_or_inf(old_val) {
             self.nan_count -= 1;
         } else {
             self.sum -= old_val;
+        }
+
+        if is_nan_or_inf(new_val) {
+            self.nan_count += 1;
+        } else {
+            self.sum += new_val;
         }
 
         if self.nan_count > 0 {

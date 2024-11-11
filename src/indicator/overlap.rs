@@ -297,28 +297,47 @@ impl TRIMA {
 #[pyclass]
 pub struct WMA {
     container: rolling::container::Container,
-    weights: Vec<f64>,
+    n: usize,
+    nan_count: usize,
+    sum: f64,
+    weighted_sum: f64,
 }
 
 #[pymethods]
 impl WMA {
     #[new]
-    pub fn new(timeperiod: usize) -> Self {
-        let weight_sum = (timeperiod * (timeperiod + 1)) as f64 / 2.0;
+    pub fn new(n: usize) -> Self {
         Self {
-            container: rolling::container::Container::new(timeperiod),
-            weights: (0..timeperiod)
-                .map(|i| (i as f64 + 1.0) / weight_sum)
-                .collect::<Vec<_>>(),
+            container: rolling::container::Container::new(n),
+            n,
+            nan_count: n,
+            sum: 0.0,
+            weighted_sum: 0.0,
         }
     }
 
     pub fn update(&mut self, new_val: f64) -> f64 {
+        let old_val = self.container.head();
         self.container.update(new_val);
-        self.container
-            .iter()
-            .zip(&self.weights)
-            .map(|(x, w)| x * w)
-            .sum()
+
+        if is_nan_or_inf(old_val) {
+            self.nan_count -= 1;
+        } else {
+            self.weighted_sum -= self.sum;
+            self.sum -= old_val;
+        }
+
+        if is_nan_or_inf(new_val) {
+            self.nan_count += 1;
+        } else {
+            self.weighted_sum += new_val * self.n as f64;
+            self.sum += new_val;
+        }
+
+        if self.nan_count > 0 {
+            NAN
+        } else {
+            self.weighted_sum / (self.n * (self.n + 1)) as f64 * 2.0
+        }
     }
 }
