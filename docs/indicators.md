@@ -92,3 +92,7 @@ Momentum Indicator Functions
 - [x] TRIX - 1-day Rate-Of-Change (ROC) of a Triple Smooth EMA, `real = TRIX(real, timeperiod=30)`
 - [x] ULTOSC - Ultimate Oscillator, `real = ULTOSC(high, low, close, timeperiod1=7, timeperiod2=14, timeperiod3=28)`
 - [x] WILLR - Williams' %R, `real = WILLR(high, low, close, timeperiod=14)`
+
+
+Others
+- [x] KDJ

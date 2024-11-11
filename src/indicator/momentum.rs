@@ -243,6 +243,35 @@ impl DX {
 }
 
 #[pyclass]
+pub struct KDJ {
+    lowest: rolling::minmax::Miner,
+    highest: rolling::minmax::Maxer,
+    d_liner: rolling::statis::Meaner,
+}
+
+#[pymethods]
+impl KDJ {
+    #[new]
+    pub fn new(view_period: usize, ma_period: usize) -> Self {
+        Self {
+            lowest: rolling::minmax::Miner::new(view_period),
+            highest: rolling::minmax::Maxer::new(view_period),
+            d_liner: rolling::statis::Meaner::new(ma_period),
+        }
+    }
+
+    pub fn update(&mut self, price: f64, high: f64, low: f64) -> (f64, f64, f64) {
+        let lowest_low = self.lowest.update(low);
+        let highest_high = self.highest.update(high);
+        let k_line = (price - lowest_low) / (highest_high - lowest_low);
+        let d_line = self.d_liner.update(k_line);
+        let j_line = 3.0 * k_line - 2.0 * d_line;
+
+        (k_line, d_line, j_line)
+    }
+}
+
+#[pyclass]
 pub struct MACD {
     fast_ema: EMA,
     slow_ema: EMA,
