@@ -64,7 +64,7 @@ Cycle Indicator Functions
 Momentum Indicator Functions
 - [x] ADX - Average Directional Movement Index, `real = ADX(high, low, close, timeperiod=14)`
 - [x] ADXR - Average Directional Movement Index Rating, `real = ADXR(high, low, close, timeperiod=14)`
-- [] APO - Absolute Price Oscillator, `real = APO(real, fastperiod=12, slowperiod=26, matype=0)`
+- [x] APO - Absolute Price Oscillator, `real = APO(real, fastperiod=12, slowperiod=26, matype=0)`
 - [x] AROON - Aroon, `aroondown, aroonup = AROON(high, low, timeperiod=14)`
 - [x] AROONOSC - Aroon Oscillator, `real = AROONOSC(high, low, timeperiod=14)`
 - [x] BOP - Balance Of Power, `real = BOP(open, high, low, close)`
@@ -86,9 +86,9 @@ Momentum Indicator Functions
 - [x] ROCR - Rate of change ratio: (price/prevPrice), `real = ROCR(real, timeperiod=10)`
 - [x] ROCR100 - Rate of change ratio 100 scale: (price/prevPrice)*100, `real = ROCR100(real, timeperiod=10)`
 - [x] RSI - Relative Strength Index, `real = RSI(real, timeperiod=14)`
-- [] STOCH - Stochastic, `slowk, slowd = STOCH(high, low, close, fastk_period=5, slowk_period=3, slowk_matype=0, slowd_period=3, slowd_matype=0)`
-- [] STOCHF - Stochastic Fast, `fastk, fastd = STOCHF(high, low, close, fastk_period=5, fastd_period=3, fastd_matype=0)`
-- [] STOCHRSI - Stochastic Relative Strength Index, `fastk, fastd = STOCHRSI(real, timeperiod=14, fastk_period=5, fastd_period=3, fastd_matype=0)`
+- [x] STOCH - Stochastic, `slowk, slowd = STOCH(high, low, close, fastk_period=5, slowk_period=3, slowk_matype=0, slowd_period=3, slowd_matype=0)`
+- [x] STOCHF - Stochastic Fast, `fastk, fastd = STOCHF(high, low, close, fastk_period=5, fastd_period=3, fastd_matype=0)`
+- [x] STOCHRSI - Stochastic Relative Strength Index, `fastk, fastd = STOCHRSI(real, timeperiod=14, fastk_period=5, fastd_period=3, fastd_matype=0)`
 - [x] TRIX - 1-day Rate-Of-Change (ROC) of a Triple Smooth EMA, `real = TRIX(real, timeperiod=30)`
 - [x] ULTOSC - Ultimate Oscillator, `real = ULTOSC(high, low, close, timeperiod1=7, timeperiod2=14, timeperiod3=28)`
 - [x] WILLR - Williams' %R, `real = WILLR(high, low, close, timeperiod=14)`

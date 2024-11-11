@@ -650,6 +650,96 @@ impl RSI {
 }
 
 #[pyclass]
+pub struct Stoch {
+    high_maxer: rolling::minmax::Maxer,
+    low_miner: rolling::minmax::Miner,
+    slowk_liner: SMA,
+    slowd_liner: SMA,
+}
+
+#[pymethods]
+impl Stoch {
+    #[new]
+    pub fn new(fastk_period: usize, slowk_period: usize, slowd_period: usize) -> Self {
+        Self {
+            high_maxer: rolling::minmax::Maxer::new(fastk_period),
+            low_miner: rolling::minmax::Miner::new(fastk_period),
+            slowk_liner: SMA::new(slowk_period),
+            slowd_liner: SMA::new(slowd_period),
+        }
+    }
+
+    pub fn update(&mut self, high: f64, low: f64, close: f64) -> (f64, f64) {
+        let high_max = self.high_maxer.update(high);
+        let low_min = self.low_miner.update(low);
+        let fastk_line = (close - low_min) / (high_max - low_min);
+        let slowk_line = self.slowk_liner.update(fastk_line);
+        let slowd_line = self.slowd_liner.update(slowk_line);
+
+        (slowk_line, slowd_line)
+    }
+}
+
+#[pyclass]
+pub struct StochCHF {
+    high_maxer: rolling::minmax::Maxer,
+    low_miner: rolling::minmax::Miner,
+    fastd_liner: SMA,
+}
+
+#[pymethods]
+impl StochCHF {
+    #[new]
+    pub fn new(fastk_period: usize, fastd_period: usize) -> Self {
+        Self {
+            high_maxer: rolling::minmax::Maxer::new(fastk_period),
+            low_miner: rolling::minmax::Miner::new(fastk_period),
+            fastd_liner: SMA::new(fastd_period),
+        }
+    }
+
+    pub fn update(&mut self, high: f64, low: f64, close: f64) -> (f64, f64) {
+        let high_max = self.high_maxer.update(high);
+        let low_min = self.low_miner.update(low);
+        let fastk_line = (close - low_min) / (high_max - low_min);
+        let fastd_line = self.fastd_liner.update(fastk_line);
+
+        (fastk_line, fastd_line)
+    }
+}
+
+#[pyclass]
+pub struct StochRSI {
+    rsier: RSI,
+    rsi_minmaxer: rolling::minmax::MinMaxer,
+    fastk_liner: SMA,
+    fastd_liner: SMA,
+}
+
+#[pymethods]
+impl StochRSI {
+    #[new]
+    pub fn new(rsi_period: usize, fastk_period: usize, fastd_period: usize) -> Self {
+        Self {
+            rsier: RSI::new(rsi_period),
+            rsi_minmaxer: rolling::minmax::MinMaxer::new(rsi_period),
+            fastk_liner: SMA::new(fastk_period),
+            fastd_liner: SMA::new(fastd_period),
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> (f64, f64) {
+        let rsi = self.rsier.update(new_val);
+        let (rsi_min, rsi_max) = self.rsi_minmaxer.update(rsi);
+        let stoch_rsi = (rsi - rsi_min) / (rsi_max - rsi_min);
+        let fastk = self.fastk_liner.update(stoch_rsi);
+        let fastd = self.fastd_liner.update(stoch_rsi);
+
+        (fastk, fastd)
+    }
+}
+
+#[pyclass]
 pub struct TRIX {
     ema_lv1: EMA,
     ema_lv2: EMA,
