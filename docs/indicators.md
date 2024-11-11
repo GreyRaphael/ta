@@ -1,5 +1,24 @@
 # indicators
 
+Overlap Studies Functions
+- [] BBANDS - Bollinger Bands, `upperband, middleband, lowerband = BBANDS(real, timeperiod=5, nbdevup=2, nbdevdn=2, matype=0)`
+- [x] DEMA - Double Exponential Moving Average, `real = DEMA(real, timeperiod=30)`
+- [x] EMA - Exponential Moving Average, `real = EMA(real, timeperiod=30)`
+- [] HT_TRENDLINE - Hilbert Transform - Instantaneous Trendline, `real = HT_TRENDLINE(real)`
+- [x] KAMA - Kaufman Adaptive Moving Average, `real = KAMA(real, timeperiod=30)`
+- [x] MA - Moving average, `real = MA(real, timeperiod=30, matype=0)`
+- [] MAMA - MESA Adaptive Moving Average, `mama, fama = MAMA(real, fastlimit=0, slowlimit=0)`
+- [] MAVP - Moving average with variable period, `real = MAVP(real, periods, minperiod=2, maxperiod=30, matype=0)`
+- [x] MIDPOINT - MidPoint over period, `real = MIDPOINT(real, timeperiod=14)`
+- [x] MIDPRICE - Midpoint Price over period, `real = MIDPRICE(high, low, timeperiod=14)`
+- [] SAR - Parabolic SAR, `real = SAR(high, low, acceleration=0, maximum=0)`
+- [] SAREXT - Parabolic SAR - Extended, `real = SAREXT(high, low, startvalue=0, offsetonreverse=0, accelerationinitlong=0, accelerationlong=0, accelerationmaxlong=0, accelerationinitshort=0, accelerationshort=0, accelerationmaxshort=0)`
+- [x] SMA - Simple Moving Average, `real = SMA(real, timeperiod=30)`
+- [x] T3 - Triple Exponential Moving Average (T3), `real = T3(real, timeperiod=5, vfactor=0)`
+- [x] TEMA - Triple Exponential Moving Average, `real = TEMA(real, timeperiod=30)`
+- [x] TRIMA - Triangular Moving Average, `real = TRIMA(real, timeperiod=30)`
+- [x] WMA - Weighted Moving Average, `real = WMA(real, timeperiod=30)`
+
 Math Transform Functions
 - [x] ACOS - Vector Trigonometric ACos, `real = ACOS(real)`
 - [x] ASIN - Vector Trigonometric ASin, `real = ASIN(real)`
