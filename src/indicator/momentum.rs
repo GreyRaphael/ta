@@ -243,6 +243,33 @@ impl DX {
 }
 
 #[pyclass]
+pub struct MACD {
+    fast_ema: EMA,
+    slow_ema: EMA,
+    signal_ema: EMA,
+}
+
+#[pymethods]
+impl MACD {
+    #[new]
+    pub fn new(fast_period: usize, slow_period: usize, signal_period: usize) -> Self {
+        Self {
+            fast_ema: EMA::new(fast_period),
+            slow_ema: EMA::new(slow_period),
+            signal_ema: EMA::new(signal_period),
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> (f64, f64, f64) {
+        let macd_line = self.fast_ema.update(new_val) - self.slow_ema.update(new_val);
+        let signal_line = self.signal_ema.update(macd_line);
+        let macd_hist = macd_line - signal_line;
+
+        (macd_line, signal_line, macd_hist)
+    }
+}
+
+#[pyclass]
 pub struct MinusDM {
     high_vec: rolling::container::Container,
     low_vec: rolling::container::Container,
