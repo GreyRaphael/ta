@@ -591,6 +591,30 @@ impl PPO {
 }
 
 #[pyclass]
+pub struct PPOHist {
+    ppo: PPO,
+    signal_emaer: EMA,
+}
+
+#[pymethods]
+impl PPOHist {
+    #[new]
+    pub fn new(fast_period: usize, slow_period: usize, signal_period: usize) -> Self {
+        Self {
+            ppo: PPO::new(fast_period, slow_period),
+            signal_emaer: EMA::new(signal_period),
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> f64 {
+        let ppo_val = self.ppo.update(new_val);
+        let signal_line = self.signal_emaer.update(ppo_val);
+
+        ppo_val - signal_line
+    }
+}
+
+#[pyclass]
 pub struct ROC {
     pctchanger: rolling::delta::Pctchanger,
 }
