@@ -261,8 +261,10 @@ impl MACD {
     }
 
     pub fn update(&mut self, new_val: f64) -> (f64, f64, f64) {
+        // velocity, 1st derivative
         let macd_line = self.fast_ema.update(new_val) - self.slow_ema.update(new_val);
         let signal_line = self.signal_ema.update(macd_line);
+        // acceleration, 2nd derivative
         let macd_hist = macd_line - signal_line;
 
         (macd_line, signal_line, macd_hist)

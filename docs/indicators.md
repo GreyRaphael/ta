@@ -71,9 +71,9 @@ Momentum Indicator Functions
 - [x] CCI - Commodity Channel Index, `real = CCI(high, low, close, timeperiod=14)`
 - [x] CMO - Chande Momentum Oscillator, `real = CMO(real, timeperiod=14)`
 - [x] DX - Directional Movement Index, `real = DX(high, low, close, timeperiod=14)`
-- [] MACD - Moving Average Convergence/Divergence, `macd, macdsignal, macdhist = MACD(real, fastperiod=12, slowperiod=26, signalperiod=9)`
+- [X] MACD - Moving Average Convergence/Divergence, `macd, macdsignal, macdhist = MACD(real, fastperiod=12, slowperiod=26, signalperiod=9)`
 - [] MACDEXT - MACD with controllable MA type, `macd, macdsignal, macdhist = MACDEXT(real, fastperiod=12, fastmatype=0, slowperiod=26, slowmatype=0, signalperiod=9, signalmatype=0)`
-- [] MACDFIX - Moving Average Convergence/Divergence Fix 12/26, `macd, macdsignal, macdhist = MACDFIX(real, signalperiod=9)`
+- [X] MACDFIX - Moving Average Convergence/Divergence Fix 12/26, `macd, macdsignal, macdhist = MACDFIX(real, signalperiod=9)`
 - [x] MFI - Money Flow Index, `real = MFI(high, low, close, volume, timeperiod=14)`
 - [x] MINUS_DI - Minus Directional Indicator, `real = MINUS_DI(high, low, close, timeperiod=14)`
 - [x] MINUS_DM - Minus Directional Movement, `real = MINUS_DM(high, low, timeperiod=14)`
