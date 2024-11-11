@@ -247,16 +247,18 @@ pub struct KDJ {
     lowest: rolling::minmax::Miner,
     highest: rolling::minmax::Maxer,
     d_liner: rolling::statis::Meaner,
+    j_liner: rolling::statis::Meaner,
 }
 
 #[pymethods]
 impl KDJ {
     #[new]
-    pub fn new(view_period: usize, ma_period: usize) -> Self {
+    pub fn new(view_period: usize, d_period: usize, j_period: usize) -> Self {
         Self {
             lowest: rolling::minmax::Miner::new(view_period),
             highest: rolling::minmax::Maxer::new(view_period),
-            d_liner: rolling::statis::Meaner::new(ma_period),
+            d_liner: rolling::statis::Meaner::new(d_period),
+            j_liner: rolling::statis::Meaner::new(j_period),
         }
     }
 
@@ -265,7 +267,8 @@ impl KDJ {
         let highest_high = self.highest.update(high);
         let k_line = (price - lowest_low) / (highest_high - lowest_low);
         let d_line = self.d_liner.update(k_line);
-        let j_line = 3.0 * k_line - 2.0 * d_line;
+        let j_line_raw = 3.0 * k_line - 2.0 * d_line;
+        let j_line = self.j_liner.update(j_line_raw);
 
         (k_line, d_line, j_line)
     }
