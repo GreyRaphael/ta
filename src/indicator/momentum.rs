@@ -1,6 +1,29 @@
-use super::overlap::EMA;
+use super::overlap::{EMA, SMA};
 use crate::{max, rolling};
 use pyo3::prelude::*;
+
+// Awesome Oscillator
+#[pyclass]
+pub struct AO {
+    fast_smaer: SMA,
+    slow_smaer: SMA,
+}
+
+#[pymethods]
+impl AO {
+    #[new]
+    pub fn new(fast_period: usize, slow_period: usize) -> Self {
+        Self {
+            fast_smaer: SMA::new(fast_period),
+            slow_smaer: SMA::new(slow_period),
+        }
+    }
+
+    pub fn update(&mut self, high: f64, low: f64) -> f64 {
+        let med_price = (high + low) / 2.0;
+        self.fast_smaer.update(med_price) - self.slow_smaer.update(med_price)
+    }
+}
 
 // https://github.com/TA-Lib/ta-lib-python/blob/master/docs/func_groups/momentum_indicators.md
 
