@@ -14,7 +14,7 @@ pub struct BBands {
 #[pymethods]
 impl BBands {
     #[new]
-    pub fn new(period: usize, nbdevup:f64, nbdevdn:f64) -> Self {
+    pub fn new(period: usize, nbdevup: f64, nbdevdn: f64) -> Self {
         Self {
             smaer: rolling::statis::Meaner::new(period),
             stder: rolling::statis::Stder::new(period),
@@ -23,12 +23,12 @@ impl BBands {
         }
     }
 
-    pub fn update(&mut self, new_val: f64) -> (f64,f64,f64) {
+    pub fn update(&mut self, new_val: f64) -> (f64, f64, f64) {
         let dev = self.stder.update(new_val);
-        let middleband=self.smaer.update(new_val);
+        let middleband = self.smaer.update(new_val);
 
-        let upperband = self.nbdevup * dev + middleband;
-        let lowerband = self.nbdevdn*dev + middleband;
+        let upperband = middleband + self.nbdevup * dev;
+        let lowerband = middleband - self.nbdevdn * dev;
 
         (lowerband, middleband, upperband)
     }
