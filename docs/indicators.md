@@ -1,7 +1,7 @@
 # indicators
 
 Overlap Studies Functions
-- [] BBANDS - Bollinger Bands, `upperband, middleband, lowerband = BBANDS(real, timeperiod=5, nbdevup=2, nbdevdn=2, matype=0)`
+- [x] BBANDS - Bollinger Bands, `upperband, middleband, lowerband = BBANDS(real, timeperiod=5, nbdevup=2, nbdevdn=2, matype=0)`
 - [x] DEMA - Double Exponential Moving Average, `real = DEMA(real, timeperiod=30)`
 - [x] EMA - Exponential Moving Average, `real = EMA(real, timeperiod=30)`
 - [] HT_TRENDLINE - Hilbert Transform - Instantaneous Trendline, `real = HT_TRENDLINE(real)`

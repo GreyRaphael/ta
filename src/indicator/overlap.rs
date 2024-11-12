@@ -2,6 +2,38 @@ use crate::{rolling, utils::is_nan_or_inf};
 use pyo3::prelude::*;
 use std::f64::NAN;
 
+// Bollinger Bands
+#[pyclass]
+pub struct BBands {
+    smaer: rolling::statis::Meaner,
+    stder: rolling::statis::Stder,
+    nbdevup: f64,
+    nbdevdn: f64,
+}
+
+#[pymethods]
+impl BBands {
+    #[new]
+    pub fn new(period: usize, nbdevup:f64, nbdevdn:f64) -> Self {
+        Self {
+            smaer: rolling::statis::Meaner::new(period),
+            stder: rolling::statis::Stder::new(period),
+            nbdevup,
+            nbdevdn,
+        }
+    }
+
+    pub fn update(&mut self, new_val: f64) -> (f64,f64,f64) {
+        let dev = self.stder.update(new_val);
+        let middleband=self.smaer.update(new_val);
+
+        let upperband = self.nbdevup * dev + middleband;
+        let lowerband = self.nbdevdn*dev + middleband;
+
+        (lowerband, middleband, upperband)
+    }
+}
+
 // DEMA - Double Exponential Moving Average
 // EMA1 = EMA of price
 // EMA2 = EMA of EMA1
