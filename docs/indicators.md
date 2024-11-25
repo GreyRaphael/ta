@@ -74,11 +74,11 @@ Volatility Indicator Functions
 - [x] TRANGE - True Rang `real = TRANGE(high, low, close)`
 
 Cycle Indicator Functions
-- [] HT_DCPERIOD - Hilbert Transform - Dominant Cycle Period, `real = HT_DCPERIOD(real)`
-- [] HT_DCPHASE - Hilbert Transform - Dominant Cycle Phase, `real = HT_DCPHASE(real)`
-- [] HT_PHASOR - Hilbert Transform - Phasor Components, `inphase, quadrature = HT_PHASOR(real)`
-- [] HT_SINE - Hilbert Transform - SineWave, `sine, leadsine = HT_SINE(real)`
-- [] HT_TRENDMODE - Hilbert Transform - Trend vs Cycle Mode, `integer = HT_TRENDMODE(real)`
+- [x] HT_DCPERIOD - Hilbert Transform - Dominant Cycle Period, `real = HT_DCPERIOD(real)`
+- [x] HT_DCPHASE - Hilbert Transform - Dominant Cycle Phase, `real = HT_DCPHASE(real)`
+- [x] HT_PHASOR - Hilbert Transform - Phasor Components, `inphase, quadrature = HT_PHASOR(real)`
+- [x] HT_SINE - Hilbert Transform - SineWave, `sine, leadsine = HT_SINE(real)`
+- [x] HT_TRENDMODE - Hilbert Transform - Trend vs Cycle Mode, `integer = HT_TRENDMODE(real)`
 
 Momentum Indicator Functions
 - [x] ADX - Average Directional Movement Index, `real = ADX(high, low, close, timeperiod=14)`
